@@ -1,0 +1,5 @@
+package eu.hansolo.fx.countries.evt;
+
+public enum EvtType {
+    UPDATE, FINISHED, SELECTED, CONNECTION_SELECTED_FROM, CONNECTION_SELECTED_TO, CONNECTION_SELECTED
+}

@@ -335,7 +335,7 @@ public class RegionPane extends Region {
     public void setFill(final Color fill) {
         if (null == this.fill) {
             _fill = fill;
-            redraw();
+            countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setFill(null == entry.getKey().getFill() ? fill : entry.getKey().getFill())));
         } else {
             this.fill.set(fill);
         }
@@ -343,7 +343,9 @@ public class RegionPane extends Region {
     public ObjectProperty<Color> fillProperty() {
         if (null == fill) {
             fill = new ObjectPropertyBase<>(_fill) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setFill(null == entry.getKey().getFill() ? get() : entry.getKey().getFill())));
+                }
                 @Override public Object getBean() { return RegionPane.this; }
                 @Override public String getName() { return "fill"; }
             };
@@ -356,7 +358,7 @@ public class RegionPane extends Region {
     public void setStroke(final Color stroke) {
         if (null == this.stroke) {
             _stroke = stroke;
-            redraw();
+            countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setStroke(null == entry.getKey().getStroke() ? stroke : entry.getKey().getStroke())));
         } else {
             this.stroke.set(stroke);
         }
@@ -364,7 +366,9 @@ public class RegionPane extends Region {
     public ObjectProperty<Color> strokeProperty() {
         if (null == stroke) {
             stroke = new ObjectPropertyBase<>(_stroke) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setStroke(null == entry.getKey().getStroke() ? get() : entry.getKey().getStroke())));
+                }
                 @Override public Object getBean() { return RegionPane.this; }
                 @Override public String getName() { return "stroke"; }
             };
@@ -377,7 +381,7 @@ public class RegionPane extends Region {
     public void setLineWidth(final double lineWidth) {
         if (null == this.lineWidth) {
             _lineWidth = lineWidth;
-            redraw();
+            countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setStrokeWidth(lineWidth)));
         } else {
             this.lineWidth.set(lineWidth);
         }
@@ -385,7 +389,9 @@ public class RegionPane extends Region {
     public DoubleProperty lineWidthProperty() {
         if (null == lineWidth) {
             lineWidth = new DoublePropertyBase(_lineWidth) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    countryPaths.entrySet().forEach(entry -> entry.getValue().forEach(countryPath -> countryPath.setStrokeWidth(get())));
+                }
                 @Override public Object getBean() { return RegionPane.this; }
                 @Override public String getName() { return "lineWidth"; }
             };

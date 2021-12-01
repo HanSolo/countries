@@ -269,7 +269,7 @@ public class CountryPane extends Region {
     public void setFill(final Color fill) {
         if (null == this.fill) {
             _fill = fill;
-            redraw();
+            country.getPaths().forEach(countryPath -> countryPath.setFill(null == country.getFill() ? fill : country.getFill()));
         } else {
             this.fill.set(fill);
         }
@@ -277,7 +277,9 @@ public class CountryPane extends Region {
     public ObjectProperty<Color> fillProperty() {
         if (null == fill) {
             fill = new ObjectPropertyBase<>(_fill) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    country.getPaths().forEach(countryPath -> countryPath.setFill(null == country.getFill() ? get() : country.getFill()));
+                }
                 @Override public Object getBean() { return CountryPane.this; }
                 @Override public String getName() { return "fill"; }
             };
@@ -290,7 +292,7 @@ public class CountryPane extends Region {
     public void setStroke(final Color stroke) {
         if (null == this.stroke) {
             _stroke = stroke;
-            redraw();
+            country.getPaths().forEach(countryPath -> countryPath.setStroke(null == country.getStroke() ? stroke : country.getStroke()));
         } else {
             this.stroke.set(stroke);
         }
@@ -298,7 +300,9 @@ public class CountryPane extends Region {
     public ObjectProperty<Color> strokeProperty() {
         if (null == stroke) {
             stroke = new ObjectPropertyBase<>(_stroke) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    country.getPaths().forEach(countryPath -> countryPath.setStroke(null == country.getStroke() ? get() : country.getStroke()));
+                }
                 @Override public Object getBean() { return CountryPane.this; }
                 @Override public String getName() { return "stroke"; }
             };
@@ -311,7 +315,7 @@ public class CountryPane extends Region {
     public void setLineWidth(final double lineWidth) {
         if (null == this.lineWidth) {
             _lineWidth = lineWidth;
-            redraw();
+            country.getPaths().forEach(countryPath -> countryPath.setStrokeWidth(lineWidth));
         } else {
             this.lineWidth.set(lineWidth);
         }
@@ -319,7 +323,9 @@ public class CountryPane extends Region {
     public DoubleProperty lineWidthProperty() {
         if (null == lineWidth) {
             lineWidth = new DoublePropertyBase(_lineWidth) {
-                @Override protected void invalidated() { redraw(); }
+                @Override protected void invalidated() {
+                    country.getPaths().forEach(countryPath -> countryPath.setStrokeWidth(get()));
+                }
                 @Override public Object getBean() { return CountryPane.this; }
                 @Override public String getName() { return "lineWidth"; }
             };

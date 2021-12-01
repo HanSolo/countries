@@ -652,13 +652,13 @@ public class RegionPane extends Region {
     }
 
     public Mapping getHeatmapColorMapping() { return heatmap.getColorMapping(); }
-    public void setHeatmapColorMapping(final Mapping colorMapping) { heatmap.setColorMapping(colorMapping); }
+    public void setHeatmapColorMapping(final Mapping colorMapping) { Platform.runLater(() -> heatmap.setColorMapping(colorMapping)); }
 
     public double getHeatmapSpotRadius() { return heatmap.getSpotRadius(); }
     public void setHeatmapSpotRadius(final double spotRadius) { heatmap.setSpotRadius(spotRadius); }
 
     public boolean isHeatmapFadeColors() { return heatmap.isFadeColors(); }
-    public void setHeatmapFadeColors(final boolean fadeColors) { heatmap.setFadeColors(fadeColors); }
+    public void setHeatmapFadeColors(final boolean fadeColors) { Platform.runLater(() -> heatmap.setFadeColors(fadeColors)); }
 
     public OpacityDistribution getHeatmapOpacityDistribution() { return heatmap.getOpacityDistribution(); }
     public void setHeatmapOpacityDistribution(final OpacityDistribution opacityDistribution) { heatmap.setOpacityDistribution(opacityDistribution); }

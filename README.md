@@ -48,16 +48,16 @@ There is a method getCities() in the Helper class that returns the complete list
 The WorldPane simply shows all available countries which gives you the whole world.
 To get a better understanding on how it works just take a look at the DemoWorldPane class.
 
-![DemoWorldPane](https://raw.githubusercontent.com/HanSolo/countries/DemoWorldPane.png)
+![DemoWorldPane](https://raw.githubusercontent.com/HanSolo/countries/main/DemoWorldPane.png)
 
 The RegionPane shows a region of countries (some of them are already predefined in the BusinessRegion class 
 e.g. European Union, South America, APAC, EMEA etc.).
 With this you can visualize data based on one of those regions. Just take a look at the
 DemoRegionPane class to get a better understanding.
 
-![DemoRegionPane](https://raw.githubusercontent.com/HanSolo/countries/DemoRegionPane.png)
+![DemoRegionPane](https://raw.githubusercontent.com/HanSolo/countries/main/DemoRegionPane.png)
 
 The CountryPane shows just one country. To see how to use it please take a look at the 
 DemoCountryPane class.
 
-![DemoCountryPane](https://raw.githubusercontent.com/HanSolo/countries/DemoCountryPane.png)
+![DemoCountryPane](https://raw.githubusercontent.com/HanSolo/countries/main/DemoCountryPane.png)

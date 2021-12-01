@@ -112,10 +112,15 @@ public class HeatMap extends ImageView {
      * @param spots
      */
     public void addSpots(final List<Point> spots) {
+        spotList.addAll(spots);
+        spots.forEach(spot -> ctx.drawImage(spotImage, spot.getX() - spotRadius, spot.getY() - spotRadius));
+        /*
         spots.forEach(spot -> {
-            spotList.add(new Point(spot.getX(), spot.getY()));
+            //spotList.add(new Point(spot.getX(), spot.getY()));
+            //spotList.add(spot);
             ctx.drawImage(spotImage, spot.getX() - spotRadius, spot.getY() - spotRadius);
         });
+        */
         updateHeatMap();
     }
 

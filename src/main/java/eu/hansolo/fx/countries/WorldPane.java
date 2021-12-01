@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javafx.scene.input.MouseEvent.MOUSE_ENTERED;
 import static javafx.scene.input.MouseEvent.MOUSE_EXITED;
@@ -248,15 +249,14 @@ public class WorldPane extends Region {
         showing.addListener(o -> {
             if (showing.get()) {
                 resize();
-                Platform.runLater(() -> {
-                    heatmap.clearHeatMap();
-                    heatmapSpots.forEach(spot -> {
-                        final Point  p = Helper.latLonToXY(spot);
-                        final double x = p.getX() * scaleX;
-                        final double y = p.getY() * scaleY;
-                        heatmap.addSpot(x, y);
-                    });
+                List<Point> scaledSpots = new ArrayList<>();
+                heatmapSpots.forEach(spot -> {
+                    final Point  p = Helper.latLonToXY(spot);
+                    final double x = p.getX() * scaleX;
+                    final double y = p.getY() * scaleY;
+                    scaledSpots.add(new Point(x, y));
                 });
+                heatmap.setSpots(scaledSpots);
             }
         });
     }
@@ -617,13 +617,14 @@ public class WorldPane extends Region {
         heatmapSpots.clear();
         heatmapSpots.addAll(spots);
         Platform.runLater(() -> {
-            heatmap.clearHeatMap();
+            List<Point> scaledSpots = new ArrayList<>();
             heatmapSpots.forEach(spot -> {
                 final Point  p = Helper.latLonToXY(spot);
                 final double x = p.getX() * scaleX;
                 final double y = p.getY() * scaleY;
-                heatmap.addSpot(x, y);
+                scaledSpots.add(new Point(x, y));
             });
+            heatmap.setSpots(scaledSpots);
         });
         redraw();
     }

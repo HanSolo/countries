@@ -297,15 +297,14 @@ public class RegionPane extends Region {
         showing.addListener(o -> {
             if (showing.get()) {
                 resize();
-                Platform.runLater(() -> {
-                    heatmap.clearHeatMap();
-                    heatmapSpots.forEach(spot -> {
-                        final Point  p = Helper.latLonToXY(spot);
-                        final double x = (p.getX() - regionOffsetX) * scaleX;
-                        final double y = (p.getY() - regionOffsetY) * scaleY;
-                        heatmap.addSpot(x, y);
-                    });
+                List<Point> scaledSpots = new ArrayList<>();
+                heatmapSpots.forEach(spot -> {
+                    final Point  p = Helper.latLonToXY(spot);
+                    final double x = p.getX() * scaleX;
+                    final double y = p.getY() * scaleY;
+                    scaledSpots.add(new Point(x, y));
                 });
+                heatmap.setSpots(scaledSpots);
             }
         });
     }
@@ -672,13 +671,14 @@ public class RegionPane extends Region {
         heatmapSpots.clear();
         heatmapSpots.addAll(spots);
         Platform.runLater(() -> {
-            heatmap.clearHeatMap();
+            List<Point> scaledSpots = new ArrayList<>();
             heatmapSpots.forEach(spot -> {
                 final Point  p = Helper.latLonToXY(spot);
-                final double x = (p.getX() - regionOffsetX) * scaleX;
-                final double y = (p.getY() - regionOffsetY) * scaleY;
-                heatmap.addSpot(x, y);
+                final double x = p.getX() * scaleX;
+                final double y = p.getY() * scaleY;
+                scaledSpots.add(new Point(x, y));
             });
+            heatmap.setSpots(scaledSpots);
         });
         redraw();
     }

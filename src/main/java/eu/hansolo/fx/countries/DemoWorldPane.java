@@ -33,8 +33,8 @@ public class DemoWorldPane extends Application {
         List<Point> heatmapSpots = new ArrayList<>();
         Helper.getCities()
               .stream()
-              .filter(city -> city.country() == Country.DE)
-              .filter(city -> city.population() > 200_000)
+              //.filter(city -> city.country() == Country.DE)
+              .filter(city -> city.population() > 1_000_000)
               .forEach(city -> heatmapSpots.add(new Point(city.lon(), city.lat()))); // Keep in mind that longitude == x and latitude == y
 
         worldPane = WorldPaneBuilder.create()
@@ -48,7 +48,6 @@ public class DemoWorldPane extends Application {
                                     .hoverEnabled(true)
                                     .selectionEnabled(true)
                                     .build();
-
         worldPane.selectedCountryProperty().addListener((o, ov, nv) -> System.out.println(nv));
     }
 

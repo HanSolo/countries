@@ -1,5 +1,6 @@
 package eu.hansolo.fx.countries;
 
+import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.Mapping;
 import eu.hansolo.fx.countries.tools.OpacityDistribution;
 import eu.hansolo.fx.countries.tools.Poi;
@@ -23,7 +24,7 @@ import java.util.List;
 
 
 public class WorldPaneBuilder<B extends WorldPaneBuilder<B>> {
-    private HashMap<String, Property> properties = new HashMap<>();
+    private final HashMap<String, Property> properties = new HashMap<>();
 
 
     // ******************** Constructors **************************************
@@ -116,6 +117,16 @@ public class WorldPaneBuilder<B extends WorldPaneBuilder<B>> {
     public final B heatmapOpacity(final double heatmapOpacity) {
         properties.put("heatmapOpacity", new SimpleDoubleProperty(heatmapOpacity));
         return (B) this;
+    }
+
+    public final B connections(final List<Connection> connections) {
+        properties.put("connections", new SimpleObjectProperty<>(connections));
+        return (B)this;
+    }
+
+    public final B overlayVisible(final boolean overlayVisible) {
+        properties.put("overlayVisible", new SimpleBooleanProperty(overlayVisible));
+        return (B)this;
     }
 
     public final B hoverEnabled(final boolean hoverEnabled) {
@@ -235,6 +246,7 @@ public class WorldPaneBuilder<B extends WorldPaneBuilder<B>> {
         return (B)this;
     }
 
+
     public final WorldPane build() {
         WorldPane worldPane = new WorldPane();
         for (String key : properties.keySet()) {
@@ -307,6 +319,10 @@ public class WorldPaneBuilder<B extends WorldPaneBuilder<B>> {
                 worldPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
             } else if ("heatmapOpacity".equals(key)) {
                 worldPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
+            } else if ("connections".equals(key)) {
+                worldPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
+            } else if ("overlayVisible".equals(key)) {
+                worldPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
             } else if ("hoverEnabled".equals(key)) {
                 worldPane.setHoverEnabled(((BooleanProperty) properties.get(key)).get());
             } else if ("selectionEnabled".equals(key)) {

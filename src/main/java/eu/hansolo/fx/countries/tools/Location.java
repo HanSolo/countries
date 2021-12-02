@@ -1,8 +1,8 @@
 package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.evt.EvtType;
-import eu.hansolo.fx.countries.evt.LocationEvt;
-import eu.hansolo.fx.countries.evt.LocationEvtObserver;
+import eu.hansolo.fx.countries.evt.Evt;
+import eu.hansolo.fx.countries.evt.EvtObserver;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.DoublePropertyBase;
 import javafx.beans.property.ObjectProperty;
@@ -38,29 +38,29 @@ public class Location {
     }
 
 
-    private final LocationEvt               UPDATE_EVENT = new LocationEvt(Location.this, EvtType.UPDATE);
-    private       String                    _name;
-    private       StringProperty            name;
-    private       Instant                   _timestamp;
-    private       ObjectProperty<Instant>   timestamp;
-    private       double                    _latitude;
-    private       DoubleProperty            latitude;
-    private       double                    _longitude;
-    private       DoubleProperty            longitude;
-    private       double                    _altitude;
-    private       DoubleProperty            altitude;
-    private       String                    _info;
-    private       StringProperty            info;
-    private       Color                     _fill;
-    private       ObjectProperty<Color>     fill;
-    private       Color                     _stroke;
-    private       ObjectProperty<Color>     stroke;
-    private       int                       zoomLevel;
-    private       List<LocationEvtObserver> observers;
-    private       EventHandler<MouseEvent>  mouseEnterHandler;
-    private       EventHandler<MouseEvent>  mousePressHandler;
-    private       EventHandler<MouseEvent>  mouseReleaseHandler;
-    private       EventHandler<MouseEvent>  mouseExitHandler;
+    private final Evt<Location>               UPDATE_EVENT = new Evt<>(Location.this, EvtType.UPDATE);
+    private       String                      _name;
+    private       StringProperty              name;
+    private       Instant                     _timestamp;
+    private       ObjectProperty<Instant>     timestamp;
+    private       double                      _latitude;
+    private       DoubleProperty              latitude;
+    private       double                      _longitude;
+    private       DoubleProperty              longitude;
+    private       double                      _altitude;
+    private       DoubleProperty              altitude;
+    private       String                      _info;
+    private       StringProperty              info;
+    private       Color                       _fill;
+    private       ObjectProperty<Color>       fill;
+    private       Color                       _stroke;
+    private       ObjectProperty<Color>       stroke;
+    private       ConnectionPartType          connectionPartType;
+    private       List<EvtObserver<Location>> observers;
+    private       EventHandler<MouseEvent>    mouseEnterHandler;
+    private       EventHandler<MouseEvent>    mousePressHandler;
+    private       EventHandler<MouseEvent>    mouseReleaseHandler;
+    private       EventHandler<MouseEvent>    mouseExitHandler;
 
 
     // ******************** Constructors **************************************
@@ -89,16 +89,16 @@ public class Location {
         this(latitude, longitude, altitude, timestamp, name, "", Color.BLACK, Color.TRANSPARENT);
     }
     public Location(final double latitude, final double longitude, final double altitude, final Instant timestamp, final String name, final String info, final Color fill, final Color stroke) {
-        _name      = name;
-        _latitude  = latitude;
-        _longitude = longitude;
-        _altitude  = altitude;
-        _timestamp = timestamp;
-        _info      = info;
-        _fill      = fill;
-        _stroke    = stroke;
-        zoomLevel  = 15;
-        observers  = new CopyOnWriteArrayList<>();
+        _name              = name;
+        _latitude          = latitude;
+        _longitude         = longitude;
+        _altitude          = altitude;
+        _timestamp         = timestamp;
+        _info              = info;
+        _fill              = fill;
+        _stroke            = stroke;
+        connectionPartType = ConnectionPartType.NONE;
+        observers          = new CopyOnWriteArrayList<>();
     }
 
 
@@ -107,7 +107,7 @@ public class Location {
     public void setName(final String name) {
         if (null == this.name) {
             _name = name;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.name.set(name);
         }
@@ -115,7 +115,7 @@ public class Location {
     public StringProperty nameProperty() {
         if (null == name) {
             name = new StringPropertyBase(_name) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "name"; }
             };
@@ -129,7 +129,7 @@ public class Location {
     public void setTimestamp(final Instant timestamp) {
         if (null == this.timestamp) {
             _timestamp = timestamp;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.timestamp.set(timestamp);
         }
@@ -137,7 +137,7 @@ public class Location {
     public ObjectProperty<Instant> timestampProperty() {
         if (null == timestamp) {
             timestamp = new ObjectPropertyBase<Instant>(_timestamp) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "timestamp"; }
             };
@@ -150,7 +150,7 @@ public class Location {
     public void setLatitude(final double latitude) {
         if (null == this.latitude) {
             _latitude = latitude;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.latitude.set(latitude);
         }
@@ -158,7 +158,7 @@ public class Location {
     public DoubleProperty latitudeProperty() {
         if (null == latitude) {
             latitude = new DoublePropertyBase(_latitude) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "latitude"; }
             };
@@ -170,7 +170,7 @@ public class Location {
     public void setLongitude(final double longitude) {
         if (null == this.longitude) {
             _longitude = longitude;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.longitude.set(longitude);
         }
@@ -178,7 +178,7 @@ public class Location {
     public DoubleProperty longitudeProperty() {
         if (null == longitude) {
             longitude = new DoublePropertyBase(_longitude) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "longitude"; }
             };
@@ -190,7 +190,7 @@ public class Location {
     public void setAltitude(final double altitude) {
         if (null == this.altitude) {
             _altitude = altitude;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.altitude.set(altitude);
         }
@@ -198,7 +198,7 @@ public class Location {
     public DoubleProperty altitudeProperty() {
         if (null == altitude) {
             altitude = new DoublePropertyBase(_altitude) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "altitude"; }
             };
@@ -210,7 +210,7 @@ public class Location {
     public void setInfo(final String info) {
         if (null == this.info) {
             _info = info;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.info.set(info);
         }
@@ -218,7 +218,7 @@ public class Location {
     public StringProperty infoProperty() {
         if (null == info) {
             info = new StringPropertyBase(_info) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "info"; }
             };
@@ -231,7 +231,7 @@ public class Location {
     public void setFill(final Color fill) {
         if (null == this.fill) {
             _fill = fill;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.fill.set(fill);
         }
@@ -239,7 +239,7 @@ public class Location {
     public ObjectProperty<Color> fillProperty() {
         if (null == fill) {
             fill = new ObjectPropertyBase<>(_fill) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "fill"; }
             };
@@ -252,7 +252,7 @@ public class Location {
     public void setStroke(final Color stroke) {
         if (null == this.stroke) {
             _stroke = stroke;
-            fireLocationEvt(UPDATE_EVENT);
+            fireEvt(UPDATE_EVENT);
         } else {
             this.stroke.set(stroke);
         }
@@ -260,7 +260,7 @@ public class Location {
     public ObjectProperty<Color> strokeProperty() {
         if (null == stroke) {
             stroke = new ObjectPropertyBase<>(_stroke) {
-                @Override protected void invalidated() { fireLocationEvt(UPDATE_EVENT); }
+                @Override protected void invalidated() { fireEvt(UPDATE_EVENT); }
                 @Override public Object getBean() { return Location.this; }
                 @Override public String getName() { return "stroke"; }
             };
@@ -269,14 +269,11 @@ public class Location {
         return stroke;
     }
 
+    public ConnectionPartType getConnectionPartType() { return connectionPartType; }
+    public void setConnectionPartType(final ConnectionPartType connectionPartType) { this.connectionPartType = connectionPartType; }
+
     public ZonedDateTime getZonedDateTime() { return getZonedDateTime(ZoneId.systemDefault()); }
     public ZonedDateTime getZonedDateTime(final ZoneId zoneId) { return ZonedDateTime.ofInstant(getTimestamp(), zoneId); }
-
-    public int getZoomLevel() { return zoomLevel; }
-    public void setZoomLevel(final int level) {
-        zoomLevel = Helper.clamp(0, 17, level);
-        fireLocationEvt(UPDATE_EVENT);
-    }
 
     public void update(final double latitude, final double longitude) { set(latitude, longitude); }
 
@@ -292,19 +289,19 @@ public class Location {
         if (null == this.altitude)  { _altitude  = altitude;  } else { this.altitude.set(altitude);   }
         if (null == this.timestamp) { _timestamp = timestamp; } else { this.timestamp.set(timestamp); }
         if (null == this.info)      { _info      = info;      } else { this.info.set(info);           }
-        fireLocationEvt(UPDATE_EVENT);
+        fireEvt(UPDATE_EVENT);
     }
     public void set(final Location location) {
-        if (null == name)      { _name      = location.getName();      } else { name.set(location.getName());           }
-        if (null == latitude)  { _latitude  = location.getLatitude();  } else { latitude.set(location.getLatitude());   }
-        if (null == longitude) { _longitude = location.getLongitude(); } else { longitude.set(location.getLongitude()); }
-        if (null == altitude)  { _altitude  = location.getAltitude();  } else { altitude.set(location.getAltitude());   }
-        if (null == timestamp) { _timestamp = location.getTimestamp(); } else { timestamp.set(location.getTimestamp()); }
-        if (null == info)      { _info      = location.getInfo();      } else { info.set(location.getInfo());           }
-        if (null == fill)      { _fill      = location.getFill();      } else { fill.set(location.getFill());           }
-        if (null == stroke)    { _stroke    = location.getStroke();    } else { stroke.set(location.getStroke());       }
-        zoomLevel = location.getZoomLevel();
-        fireLocationEvt(UPDATE_EVENT);
+        if (null == name)               { _name      = location.getName();      }                  else { name.set(location.getName());           }
+        if (null == latitude)           { _latitude  = location.getLatitude();  }                  else { latitude.set(location.getLatitude());   }
+        if (null == longitude)          { _longitude = location.getLongitude(); }                  else { longitude.set(location.getLongitude()); }
+        if (null == altitude)           { _altitude  = location.getAltitude();  }                  else { altitude.set(location.getAltitude());   }
+        if (null == timestamp)          { _timestamp = location.getTimestamp(); }                  else { timestamp.set(location.getTimestamp()); }
+        if (null == info)               { _info      = location.getInfo();      }                  else { info.set(location.getInfo());           }
+        if (null == fill)               { _fill      = location.getFill();      }                  else { fill.set(location.getFill());           }
+        if (null == stroke)             { _stroke    = location.getStroke();    }                  else { stroke.set(location.getStroke());       }
+        if (null == connectionPartType) { connectionPartType = location.getConnectionPartType(); } else { connectionPartType = ConnectionPartType.NONE; }
+        fireEvt(UPDATE_EVENT);
     }
 
     public double getDistanceTo(final Location location) { return calcDistanceInMeter(this, location); }
@@ -373,12 +370,12 @@ public class Location {
 
 
     // ******************** Event Handling ************************************
-    public void setOnLocationEvt(final LocationEvtObserver observer) { addLocationEvtObserver(observer); }
-    public void addLocationEvtObserver(final LocationEvtObserver observer) { if (!observers.contains(observer)) observers.add(observer); }
-    public void removeLocationEvtObserver(final LocationEvtObserver observer) { if (observers.contains(observer)) observers.remove(observer); }
+    public void setOnEvt(final EvtObserver<Location> observer) { addEvtObserver(observer); }
+    public void addEvtObserver(final EvtObserver<Location> observer) { if (!observers.contains(observer)) observers.add(observer); }
+    public void removeEvtObserver(final EvtObserver<Location> observer) { if (observers.contains(observer)) observers.remove(observer); }
 
-    public void fireLocationEvt(final LocationEvt evt) {
-        for (LocationEvtObserver listener : observers) { listener.onLocationEvt(evt); }
+    public void fireEvt(final Evt<Location> evt) {
+        for (EvtObserver<Location> observer : observers) { observer.onEvt(evt); }
     }
 
 
@@ -393,6 +390,14 @@ public class Location {
 
     public EventHandler<MouseEvent> getMouseExitHandler() { return mouseExitHandler; }
     public void setMouseExitHandler(final EventHandler<MouseEvent> handler) { mouseExitHandler = handler; }
+
+    public Poi toPoi() {
+        return new Poi(getLatitude(), getLongitude(), getName(), "", null, PointSize.NORMAL, getFill(), getStroke(), null, null, null);
+    }
+
+    public static Location fromPoi(final Poi poi) {
+        return LocationBuilder.create().name(poi.getName()).fill(poi.getFill()).stroke(poi.getStroke()).latitude(poi.getLat()).longitude(poi.getLon()).build();
+    }
 
 
     // ******************** Misc **********************************************
@@ -417,7 +422,7 @@ public class Location {
                                   .append("\"info\":\"").append(getInfo()).append("\",")
                                   .append("\"fill\":\"").append(Helper.colorToWeb(getFill())).append("\",")
                                   .append("\"stroke\":\"").append(Helper.colorToWeb(getStroke())).append("\",")
-                                  .append("\"zoomLevel\":").append(getZoomLevel())
+                                  .append("\"connection_part_type\":\"").append(connectionPartType.name()).append("\"")
                                   .append("}")
                                   .toString();
     }

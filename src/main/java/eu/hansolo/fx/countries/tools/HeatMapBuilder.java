@@ -13,12 +13,11 @@ import java.util.HashMap;
 
 
 public class HeatMapBuilder<B extends HeatMapBuilder<B>> {
-    private HashMap<String, Property> properties = new HashMap<>();
+    private final HashMap<String, Property> properties = new HashMap<>();
 
 
     // ******************** Constructors **************************************
-    protected HeatMapBuilder() {
-    }
+    protected HeatMapBuilder() { }
 
 
     // ******************** Methods *******************************************
@@ -69,6 +68,7 @@ public class HeatMapBuilder<B extends HeatMapBuilder<B>> {
         properties.put("opacityDistribution", new SimpleObjectProperty<>(OPACITY_DISTRIBUTION));
         return (B)this;
     }
+
 
     public final HeatMap build() {
         double              width               = 400;

@@ -1,5 +1,6 @@
 package eu.hansolo.fx.countries;
 
+import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.Mapping;
 import eu.hansolo.fx.countries.tools.OpacityDistribution;
 import eu.hansolo.fx.countries.tools.Poi;
@@ -21,8 +22,8 @@ import java.util.List;
 
 
 public class CountryPaneBuilder<B extends CountryPaneBuilder<B>> {
-    private HashMap<String, Property> properties = new HashMap<>();
-    private Country                   country;
+    private final HashMap<String, Property> properties = new HashMap<>();
+    private final Country                   country;
 
 
     // ******************** Constructors **************************************
@@ -120,6 +121,16 @@ public class CountryPaneBuilder<B extends CountryPaneBuilder<B>> {
         return (B) this;
     }
 
+    public final B connections(final List<Connection> connections) {
+        properties.put("connections", new SimpleObjectProperty<>(connections));
+        return (B)this;
+    }
+
+    public final B overlayVisible(final boolean overlayVisible) {
+        properties.put("overlayVisible", new SimpleBooleanProperty(overlayVisible));
+        return (B)this;
+    }
+
     public final B prefSize(final double width, final double height) {
         properties.put("prefSize", new SimpleObjectProperty<>(new Dimension2D(width, height)));
         return (B)this;
@@ -191,6 +202,7 @@ public class CountryPaneBuilder<B extends CountryPaneBuilder<B>> {
         properties.put("padding", new SimpleObjectProperty<>(insets));
         return (B)this;
     }
+
 
     public final CountryPane build() {
         CountryPane countryPane = new CountryPane(country);
@@ -264,6 +276,10 @@ public class CountryPaneBuilder<B extends CountryPaneBuilder<B>> {
                 countryPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
             } else if ("heatmapOpacity".equals(key)) {
                 countryPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
+            } else if ("connections".equals(key)) {
+                countryPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
+            } else if ("overlayVisible".equals(key)) {
+                countryPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
             }
         }
         return countryPane;

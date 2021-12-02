@@ -189,6 +189,10 @@ public class Helper {
         return (((seconds / 60) + minutes) / 60) + degrees;
     }
 
+    public static final Point latLonToXY(final double lat, final double lon) {
+        final double[] xy = latLonToXY(lat, lon, Constants.MAP_OFFSET_X, Constants.MAP_OFFSET_Y, Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+        return new Point(xy[0], xy[1]);
+    }
     public static final Point latLonToXY(final Point latlon) {
         return latLonToXY(latlon, Constants.MAP_OFFSET_X, Constants.MAP_OFFSET_Y, Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
     }
@@ -202,6 +206,10 @@ public class Helper {
         return new double[]{ x, y };
     }
 
+    public static final Point xyToLatLon(final double x, final double y) {
+        double[] latlon = xyToLatLon(x, y, Constants.MAP_OFFSET_X, Constants.MAP_OFFSET_Y, Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+        return new Point(latlon[0], latlon[1]);
+    }
     public static final Point xyToLatLon(final Point xy) {
         return xyToLatLon(xy, Constants.MAP_OFFSET_X, Constants.MAP_OFFSET_Y, Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
     }
@@ -249,5 +257,75 @@ public class Helper {
         formatter.setMinimumFractionDigits(1);
         formatter.setMaximumFractionDigits(1);
         return hasDecimal ? formatter.format(truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+    public static final <T extends Point> Point getMidPoint(final T p1, final T p2) {
+        return new Point((p1.getX() + p2.getX()) / 2.0, (p1.getY() + p2.getY()) / 2.0);
+    }
+    public static final double[] getMidPoint(final double x1, final double y1, final double x2, final double y2) {
+        return new double[] { (x1 + x2) / 2.0, (y1 + y2) / 2.0 };
+    }
+
+    public static final Point rotatePointAroundRotationCenter(final Point p, final Point rc, final double angle) {
+        double[] rp = rotatePointAroundRotationCenter(p.getX(), p.getY(), rc.getX(), rc.getY(), angle);
+        return new Point(rp[0], rp[1]);
+    }
+    public static final double[] rotatePointAroundRotationCenter(final double x, final double y, final double rx, final double ry, final double angle) {
+        final double rad = Math.toRadians(angle);
+        final double sin = Math.sin(rad);
+        final double cos = Math.cos(rad);
+        final double nX  = rx + (x - rx) * cos - (y - ry) * sin;
+        final double nY  = ry + (x - rx) * sin + (y - ry) * cos;
+        return new double[] { nX, nY };
+    }
+
+    /**
+     * @param startPoint
+     * @param controlPoint1
+     * @param controlPoint2
+     * @param endPoint
+     * @param distance in % (0-1)
+     * @return
+     */
+    public static final Point getCubicBezierXYatT(final Point startPoint, final Point controlPoint1, final Point controlPoint2, final Point endPoint, final double distance) {
+        final double x = cubicN(distance, startPoint.getX(), controlPoint1.getX(), controlPoint2.getX(), endPoint.getX());
+        final double y = cubicN(distance, startPoint.getY(), controlPoint1.getY(), controlPoint2.getY(), endPoint.getY());
+        return new Point(x, y);
+    }
+    public static final double[] getCubicBezierXYatT(final double startPointX, final double startPointY,
+                                                     final double controlPoint1X, final double controlPoint1Y,
+                                                     final double controlPoint2X, final double controlPoint2Y,
+                                                     final double endPointX, final double endPointY, final double distance) {
+        final double x = cubicN(distance, startPointX, controlPoint1X, controlPoint2X, endPointX);
+        final double y = cubicN(distance, startPointY, controlPoint1Y, controlPoint2Y, endPointY);
+        return new double[] { x, y };
+    }
+    private static double cubicN(final double distance, final double a, final double b, final double c, final double d) {
+        final double t2 = distance * distance;
+        final double t3 = t2 * distance;
+        return a + (-a * 3 + distance * (3 * a - a * distance)) * distance + (3 * b + distance * (-6 * b + b * 3 * distance)) * distance + (c * 3 - c * 3 * distance) * t2 + d * t3;
+    }
+
+    public static final double getControlPointAngle(final Point p1, final Point p2) {
+        final double distance = distance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        final double cpAngle;
+        if (distance > 600) {
+            cpAngle = 80;
+        } else if (distance > 500) {
+            cpAngle = 70;
+        } else if (distance > 400) {
+            cpAngle = 60;
+        } else if (distance > 300) {
+            cpAngle = 50;
+        } else if (distance > 200) {
+            cpAngle = 40;
+        } else if (distance > 100) {
+            cpAngle = 30;
+        } else if (distance > 50) {
+            cpAngle = 20;
+        } else {
+            cpAngle = 10;
+        }
+        return cpAngle;
     }
 }

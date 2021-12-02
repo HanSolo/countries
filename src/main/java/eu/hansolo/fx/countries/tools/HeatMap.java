@@ -78,7 +78,7 @@ public class HeatMap extends ImageView {
         spotImage                = createSpotImage(this.spotRadius, this.opacityDistribution);
         canvas                   = new Canvas(this.width, this.height);
         ctx                      = canvas.getGraphicsContext2D();
-        monochromeImage          = new WritableImage((int) width, (int) height);
+        monochromeImage          = new WritableImage(this.width, this.height);
 
         SNAPSHOT_PARAMETERS.setFill(Color.TRANSPARENT);
         setImage(heatMap);
@@ -114,13 +114,6 @@ public class HeatMap extends ImageView {
     public void addSpots(final List<Point> spots) {
         spotList.addAll(spots);
         spots.forEach(spot -> ctx.drawImage(spotImage, spot.getX() - spotRadius, spot.getY() - spotRadius));
-        /*
-        spots.forEach(spot -> {
-            //spotList.add(new Point(spot.getX(), spot.getY()));
-            //spotList.add(spot);
-            ctx.drawImage(spotImage, spot.getX() - spotRadius, spot.getY() - spotRadius);
-        });
-        */
         updateHeatMap();
     }
 
@@ -361,6 +354,7 @@ public class HeatMap extends ImageView {
      * mapping.
      */
     private void updateHeatMap() {
+        if (!Platform.isFxApplicationThread()) { return; }
         canvas.snapshot(SNAPSHOT_PARAMETERS, monochromeImage);
 
         heatMap = new WritableImage(width, height);
@@ -370,6 +364,7 @@ public class HeatMap extends ImageView {
         Color       mappedColor;
         PixelWriter pixelWriter = heatMap.getPixelWriter();
         PixelReader pixelReader = monochromeImage.getPixelReader();
+
         for (int y = 0 ; y < height ; y++) {
             for (int x = 0 ; x < width ; x++) {
                 colorFromMonoChromeImage = pixelReader.getColor(x, y);

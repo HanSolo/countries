@@ -18,7 +18,12 @@ package eu.hansolo.fx.countries;
 
 import eu.hansolo.fx.countries.tools.BusinessRegion;
 import eu.hansolo.fx.countries.tools.CRegion;
+import eu.hansolo.fx.countries.tools.Connection;
+import eu.hansolo.fx.countries.tools.ConnectionBuilder;
+import eu.hansolo.fx.countries.tools.ConnectionPartType;
 import eu.hansolo.fx.countries.tools.Helper;
+import eu.hansolo.fx.countries.tools.Location;
+import eu.hansolo.fx.countries.tools.LocationBuilder;
 import eu.hansolo.fx.countries.tools.OpacityDistribution;
 import eu.hansolo.fx.countries.tools.Poi;
 import eu.hansolo.fx.countries.tools.PoiBuilder;
@@ -39,23 +44,32 @@ import java.util.stream.Collectors;
 public class DemoRegionPane extends Application {
     public static final String VERSION = PropertyManager.INSTANCE.getVersionNumber();
     private RegionPane  regionPane;
+    private List<Point> heatmapSpots;
 
 
     @Override public void init() {
-        CRegion     region       = BusinessRegion.EUROPEAN_UNION;
-        List<Poi>   capitals     = Helper.getCapitals()
-                                         .stream()
-                                         .filter(city -> region.getCountries().contains(city.country()))
-                                         .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PointSize.NORMAL).build())
-                                         .collect(Collectors.toList());
+        CRegion     region   = BusinessRegion.EUROPEAN_UNION;
+        List<Poi>   capitals = Helper.getCapitals()
+                                     .stream()
+                                     .filter(city -> region.getCountries().contains(city.country()))
+                                     .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PointSize.NORMAL).build())
+                                     .collect(Collectors.toList());
 
-        List<Point> heatmapSpots = Helper.getCities()
-                                         .stream()
-                                         .filter(city -> region.getCountries().contains(city.country()))
-                                         .filter(city -> !city.isCapital())
-                                         .filter(city -> city.population() > 200_000)
-                                         .map(city -> new Point(city.lon(), city.lat())) // keep in mind that longitude = x and latitude = y
-                                         .collect(Collectors.toList());
+        Location   fmo      = LocationBuilder.create().name("FMO").latitude(52.1307).longitude(7.6941).connectionPartType(ConnectionPartType.SOURCE).build();
+        Location   arn      = LocationBuilder.create().name("ARN").latitude(59.6498).longitude(17.9238).connectionPartType(ConnectionPartType.TARGET).build();
+        Location   mad      = LocationBuilder.create().name("MAD").latitude(40.4983).longitude(-3.5676).connectionPartType(ConnectionPartType.SOURCE).build();
+        Location   lis      = LocationBuilder.create().name("LIS").latitude(38.7756).longitude(-9.1354).connectionPartType(ConnectionPartType.SOURCE).build();
+        Connection madToArn = ConnectionBuilder.create(mad, arn).arrowsVisible(true).lineWidth(2).stroke(Color.MAGENTA).build();
+        Connection lisToArn = ConnectionBuilder.create(lis, arn).arrowsVisible(true).lineWidth(2).stroke(Color.YELLOW).build();
+        Connection fmoToArn = ConnectionBuilder.create(fmo, arn).arrowsVisible(true).lineWidth(2).stroke(Color.CYAN).build();
+
+        heatmapSpots = Helper.getCities()
+                             .stream()
+                             .filter(city -> region.getCountries().contains(city.country()))
+                             .filter(city -> !city.isCapital())
+                             .filter(city -> city.population() > 200_000)
+                             .map(city -> new Point(city.lon(), city.lat())) // keep in mind that longitude = x and latitude = y
+                             .collect(Collectors.toList());
 
         regionPane = RegionPaneBuilder.create(region)
                                       .poisVisible(true)
@@ -65,6 +79,8 @@ public class DemoRegionPane extends Application {
                                       .heatmapOpacityDistribution(OpacityDistribution.LINEAR)
                                       .heatmapSpots(heatmapSpots)
                                       .pois(capitals)
+                                      .connections(List.of(fmoToArn, madToArn, lisToArn))
+                                      .overlayVisible(true)
                                       .hoverEnabled(true)
                                       .selectionEnabled(true)
                                       .build();

@@ -1,11 +1,15 @@
 package eu.hansolo.fx.countries;
 
+import eu.hansolo.fx.countries.evt.Evt;
+import eu.hansolo.fx.countries.evt.EvtObserver;
 import eu.hansolo.fx.countries.font.Fonts;
 import eu.hansolo.fx.countries.tools.ColorMapping;
+import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.Constants;
 import eu.hansolo.fx.countries.tools.HeatMap;
 import eu.hansolo.fx.countries.tools.HeatMapBuilder;
 import eu.hansolo.fx.countries.tools.Helper;
+import eu.hansolo.fx.countries.tools.Location;
 import eu.hansolo.fx.countries.tools.Mapping;
 import eu.hansolo.fx.countries.tools.OpacityDistribution;
 import eu.hansolo.fx.countries.tools.Poi;
@@ -37,7 +41,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.TextAlignment;
@@ -50,63 +57,68 @@ import java.util.Map;
 
 
 @DefaultProperty("children")
-public class CountryPane extends Region {
-    private static final double                  PREFERRED_WIDTH  = 250;
-    private static final double                  PREFERRED_HEIGHT = 250;
-    private static final double                  MINIMUM_WIDTH    = 50;
-    private static final double                  MINIMUM_HEIGHT   = 50;
-    private static final double                  MAXIMUM_WIDTH    = 4096;
-    private static final double                  MAXIMUM_HEIGHT   = 4096;
-    private static       double                  aspectRatio;
-    private              double                  size;
-    private              double                  width;
-    private              double                  height;
-    private              HeatMap                 heatmap;
-    private              Canvas                  canvas;
-    private              GraphicsContext         ctx;
-    private              Pane                    pane;
-    private              Group                   group;
-    private              Country                 country;
-    private              double                  countryOffsetX;
-    private              double                  countryOffsetY;
-    private              double                  scaleX;
-    private              double                  scaleY;
-    private              Color                   _fill;
-    private              ObjectProperty<Color>   fill;
-    private              Color                   _stroke;
-    private              ObjectProperty<Color>   stroke;
-    private              double                  _lineWidth;
-    private              DoubleProperty          lineWidth;
-    private              Color                   _poiFill;
-    private              ObjectProperty<Color>   poiFill;
-    private              Color                   _poiStroke;
-    private              ObjectProperty<Color>   poiStroke;
-    private              Color                   _poiTextFill;
-    private              ObjectProperty<Color>   poiTextFill;
-    private              boolean                 _poisVisible;
-    private              BooleanProperty         poisVisible;
-    private              boolean                 _poiTextVisible;
-    private              BooleanProperty         poiTextVisible;
-    private              ObservableList<Poi>     pois;
-    private              List<Point>             heatmapSpots;
-    private              BooleanBinding          showing;
-    private              ListChangeListener<Poi> poiListChangeListener;
+public class CountryPane extends Region implements EvtObserver<Connection> {
+    private static final double                         PREFERRED_WIDTH  = 250;
+    private static final double                         PREFERRED_HEIGHT = 250;
+    private static final double                         MINIMUM_WIDTH    = 50;
+    private static final double                         MINIMUM_HEIGHT   = 50;
+    private static final double                         MAXIMUM_WIDTH    = 4096;
+    private static final double                         MAXIMUM_HEIGHT   = 4096;
+    private static       double                         aspectRatio;
+    private              double                         size;
+    private              double                         width;
+    private              double                         height;
+    private              Canvas                         overlay;
+    private              GraphicsContext                overlayCtx;
+    private              HeatMap                        heatmap;
+    private              Canvas                         canvas;
+    private              GraphicsContext                ctx;
+    private              Pane                           pane;
+    private              Group                          group;
+    private              Country                        country;
+    private              double                         countryOffsetX;
+    private              double                         countryOffsetY;
+    private              ObservableList<Connection>     connections;
+    private              double                         scaleX;
+    private              double                         scaleY;
+    private              Color                          _fill;
+    private              ObjectProperty<Color>          fill;
+    private              Color                          _stroke;
+    private              ObjectProperty<Color>          stroke;
+    private              double                         _lineWidth;
+    private              DoubleProperty                 lineWidth;
+    private              Color                          _poiFill;
+    private              ObjectProperty<Color>          poiFill;
+    private              Color                          _poiStroke;
+    private              ObjectProperty<Color>          poiStroke;
+    private              Color                          _poiTextFill;
+    private              ObjectProperty<Color>          poiTextFill;
+    private              boolean                        _poisVisible;
+    private              BooleanProperty                poisVisible;
+    private              boolean                        _poiTextVisible;
+    private              BooleanProperty                poiTextVisible;
+    private              ObservableList<Poi>            pois;
+    private              List<Point>                    heatmapSpots;
+    private              BooleanBinding                 showing;
+    private              ListChangeListener<Poi>        poiListChangeListener;
+    private              ListChangeListener<Connection> connectionListChangeListener;
 
 
     // ******************** Constructors **************************************
     public CountryPane(final Country country) {
-        this.country               = country;
-        this._fill                 = Constants.FILL;
-        this._stroke               = Constants.STROKE;
-        this._lineWidth            = 1;
-        this._poiFill              = Constants.POI_FILL;
-        this._poiStroke            = Color.TRANSPARENT;
-        this._poisVisible          = false;
-        this._poiTextVisible       = false;
-        this._poiTextFill          = Constants.TEXT_FILL;
-        this.pois                  = FXCollections.observableArrayList();
-        this.heatmapSpots          = new ArrayList<>();
-        this.poiListChangeListener = c -> {
+        this.country                      = country;
+        this.connections                  = FXCollections.observableArrayList();
+        this._fill                        = Constants.FILL;
+        this._stroke                      = Constants.STROKE;
+        this._lineWidth                   = 1;
+        this._poiFill                     = Constants.POI_FILL;
+        this._poiStroke                   = Color.TRANSPARENT;
+        this._poisVisible                 = false;
+        this._poiTextVisible              = false;
+        this._poiTextFill                 = Constants.TEXT_FILL;
+        this.pois                         = FXCollections.observableArrayList();
+        this.heatmapSpots                 = new ArrayList<>();
+        this.poiListChangeListener        = c -> {
             while (c.next()) {
                 if (c.wasAdded()) {
 
@@ -116,10 +128,20 @@ public class CountryPane extends Region {
             }
             redraw();
         };
+        this.connectionListChangeListener = c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    c.getAddedSubList().forEach(connection -> connection.addEvtObserver(CountryPane.this));
+                } else if (c.wasRemoved()) {
+                    c.getRemoved().forEach(connection -> connection.removeEvtObserver(CountryPane.this));
+                }
+            }
+            if (overlay.isVisible()) { redrawOverlay(); }
+        };
 
-        final List<Point> countryBounds = Country.getCountryBounds().get(country);
-        final Point       upperLeft     = Helper.latLonToXY(countryBounds.get(0));
-        final Point       lowerRight    = Helper.latLonToXY(countryBounds.get(1));
+        final List<Point> countryBounds   = Country.getCountryBounds().get(country);
+        final Point       upperLeft       = Helper.latLonToXY(countryBounds.get(0));
+        final Point       lowerRight      = Helper.latLonToXY(countryBounds.get(1));
         countryOffsetX = upperLeft.getX();
         countryOffsetY = upperLeft.getY();
         aspectRatio    = (lowerRight.getY() - upperLeft.getY()) / (lowerRight.getX() - upperLeft.getX());
@@ -164,8 +186,14 @@ public class CountryPane extends Region {
             }
         }
 
+        overlay    = new Canvas(PREFERRED_WIDTH, PREFERRED_HEIGHT);
+        overlayCtx = overlay.getGraphicsContext2D();
+        overlay.setMouseTransparent(true);
+        overlay.setVisible(false);
+        overlay.setManaged(false);
+
         heatmap  = HeatMapBuilder.create()
-                                 .prefSize(PREFERRED_WIDTH, PREFERRED_HEIGHT)
+                                 .prefSize(1009, 665)
                                  .colorMapping(ColorMapping.INFRARED_4)
                                  .spotRadius(5)
                                  .fadeColors(true)
@@ -174,9 +202,11 @@ public class CountryPane extends Region {
                                  .build();
         heatmap.setVisible(false);
         heatmap.setManaged(false);
+        heatmap.setMouseTransparent(true);
 
         canvas = new Canvas(PREFERRED_WIDTH, PREFERRED_HEIGHT);
         ctx    = canvas.getGraphicsContext2D();
+        canvas.setMouseTransparent(true);
 
         country.getPaths().forEach(path -> {
             path.setFill(null == country.getFill() ? getFill() : country.getFill());
@@ -194,13 +224,14 @@ public class CountryPane extends Region {
 
         setBackground(Constants.BACKGROUND);
 
-        getChildren().setAll(pane, canvas, heatmap);
+        getChildren().setAll(pane, canvas, heatmap, overlay);
     }
 
     private void registerListeners() {
         widthProperty().addListener(o -> resize());
         heightProperty().addListener(o -> resize());
         pois.addListener(poiListChangeListener);
+        connections.addListener(connectionListChangeListener);
 
         if (null != getScene()) {
             setupBinding();
@@ -234,8 +265,8 @@ public class CountryPane extends Region {
                 List<Point> scaledSpots = new ArrayList<>();
                 heatmapSpots.forEach(spot -> {
                     final Point  p = Helper.latLonToXY(spot);
-                    final double x = p.getX() * scaleX;
-                    final double y = p.getY() * scaleY;
+                    final double x = (p.getX() - countryOffsetX) * scaleX;
+                    final double y = (p.getY() - countryOffsetY) * scaleY;
                     scaledSpots.add(new Point(x, y));
                 });
                 heatmap.setSpots(scaledSpots);
@@ -454,6 +485,47 @@ public class CountryPane extends Region {
         this.pois.addListener(poiListChangeListener);
         redraw();
     }
+    public void setPois(final List<Poi> pois) {
+        this.pois.removeListener(poiListChangeListener);
+        this.pois.setAll(pois);
+        this.pois.addListener(poiListChangeListener);
+        redraw();
+    }
+    public void clearPois() { pois.clear(); }
+
+    public List<Connection> getConnections() { return Collections.unmodifiableList(connections); }
+    public void addConnection(final Connection connection) {
+        if (!connections.contains(connection)) { connections.add(connection); }
+    }
+    public void removeConnection(final Connection connection) {
+        if (connections.contains(connection)) { connections.remove(connection); }
+    }
+    public void addConnections(final List<Connection> connections) {
+        this.connections.removeListener(connectionListChangeListener);
+        connections.forEach(connection -> {
+            connection.addEvtObserver(CountryPane.this);
+            addConnection(connection);
+        });
+        this.connections.addListener(connectionListChangeListener);
+        redraw();
+    }
+    public void removeConnections(final List<Connection> connections) {
+        this.connections.removeListener(connectionListChangeListener);
+        connections.forEach(connection -> {
+            connection.removeEvtObserver(CountryPane.this);
+            removeConnection(connection);
+        });
+        this.connections.addListener(connectionListChangeListener);
+        redraw();
+    }
+    public void setConnections(final List<Connection> connections) {
+        this.connections.removeListener(connectionListChangeListener);
+        connections.forEach(connection -> connection.addEvtObserver(CountryPane.this));
+        this.connections.setAll(connections);
+        this.connections.addListener(connectionListChangeListener);
+        redraw();
+    }
+    public void clearConnections() { connections.clear(); }
 
     public boolean isShowing() { return null != showing && showing.get(); }
     public BooleanBinding showingProperty() { return showing; }
@@ -464,6 +536,14 @@ public class CountryPane extends Region {
     public void setHeatmapVisible(final boolean heatmapVisible) {
         heatmap.setManaged(heatmapVisible);
         heatmap.setVisible(heatmapVisible);
+        if (heatmapVisible) { redraw(); }
+    }
+
+    public boolean isOverlayVisible() { return overlay.isVisible(); }
+    public void setOverlayVisible(final boolean overlayVisible) {
+        overlay.setManaged(overlayVisible);
+        overlay.setVisible(overlayVisible);
+        if (overlayVisible) { redrawOverlay(); }
     }
 
     public Mapping getHeatmapColorMapping() { return heatmap.getColorMapping(); }
@@ -489,8 +569,8 @@ public class CountryPane extends Region {
             List<Point> scaledSpots = new ArrayList<>();
             heatmapSpots.forEach(spot -> {
                 final Point  p = Helper.latLonToXY(spot);
-                final double x = p.getX() * scaleX;
-                final double y = p.getY() * scaleY;
+                final double x = (p.getX() - countryOffsetX) * scaleX;
+                final double y = (p.getY() - countryOffsetY) * scaleY;
                 scaledSpots.add(new Point(x, y));
             });
             heatmap.setSpots(scaledSpots);
@@ -512,6 +592,13 @@ public class CountryPane extends Region {
     public void clearHeatmap() {
         heatmapSpots.clear();
         heatmap.clearHeatMap();
+    }
+    
+    @Override public void onEvt(final Evt<Connection> evt) {
+        switch(evt.getEventType()) {
+            case UPDATE   -> { if (overlay.isVisible()) { redrawOverlay(); } }
+            case SELECTED -> { if (overlay.isVisible()) { redrawOverlay(); } }
+        }
     }
 
 
@@ -557,14 +644,18 @@ public class CountryPane extends Region {
             heatmap.setFitHeight(pane.getHeight() * scaleY);
             heatmap.relocate((getWidth() - canvas.getWidth()) * 0.5, (getHeight() - canvas.getHeight()) * 0.5);
 
+            overlay.setWidth(pane.getWidth() * scaleX);
+            overlay.setHeight(pane.getHeight() * scaleY);
+            overlay.relocate((getWidth() - overlay.getWidth()) * 0.5, (getHeight() - overlay.getHeight()) * 0.5);
+
             redraw();
         }
     }
 
     private void redraw() {
-        double width    = canvas.getWidth();
-        double height   = canvas.getHeight();
-        double fontsize = size * 0.015;
+        final double width    = canvas.getWidth();
+        final double height   = canvas.getHeight();
+        final double fontsize = size * 0.015;
 
         ctx.clearRect(0, 0, width, height);
         ctx.setFont(Fonts.opensansLight(fontsize));
@@ -586,9 +677,9 @@ public class CountryPane extends Region {
                     switch (poi.getPointSize()) {
                         case TINY   -> { r = 0.5; d = 1;  }
                         case SMALL  -> { r = 1;   d = 2;  }
-                        case NORMAL -> { r = 2.5; d = 5;  }
-                        case BIG    -> { r = 5;   d = 10; }
-                        case HUGE   -> { r = 10;  d = 20; }
+                        case NORMAL -> { r = 1.5; d = 3;  }
+                        case BIG    -> { r = 2.5; d = 5; }
+                        case HUGE   -> { r = 4;   d = 8; }
                         default     -> { r = 1;   d = 2;  }
                     }
                     if (d >= 1) {
@@ -618,6 +709,105 @@ public class CountryPane extends Region {
                 points.entrySet().forEach(entry -> {
                     ctx.fillText(entry.getKey().getName(), entry.getValue().getX(), entry.getValue().getY() - fontsize);
                 });
+            }
+        }
+
+        // Draw overlay
+        if (overlay.isVisible()) {
+            redrawOverlay();
+        }
+    }
+
+    private void redrawOverlay() {
+        final double width  = canvas.getWidth();
+        final double height = canvas.getHeight();
+
+        overlayCtx.clearRect(0, 0, width, height);
+
+        for (Connection connection : connections) {
+            final Location p1 = connection.getTargetLocation();
+            final Location p2 = connection.getSourceLocation();
+
+            if (null == p1 || null == p2) { continue; }
+
+            final Point xy1       = Helper.latLonToXY(p1.getLatitude(), p1.getLongitude());
+            final Point xy2       = Helper.latLonToXY(p2.getLatitude(), p2.getLongitude());
+            final Point midPoint  = Helper.getMidPoint(xy1, xy2);
+            final Point midPoint1 = Helper.getMidPoint(xy1, midPoint);
+            final Point midPoint2 = Helper.getMidPoint(xy2, midPoint);
+            final Point rotCp1    = Helper.getMidPoint(xy1, midPoint2);
+            final Point rotCp2    = Helper.getMidPoint(midPoint1, xy2);
+
+            final double cpAngle  = Helper.getControlPointAngle(xy1, xy2);
+
+            xy1.translate(-countryOffsetX, -countryOffsetY);
+            xy1.scale(scaleX, scaleY);
+            xy2.translate(-countryOffsetX, -countryOffsetY);
+            xy2.scale(scaleX, scaleY);
+            midPoint.translate(-countryOffsetX, -countryOffsetY);
+            midPoint.scale(scaleX, scaleY);
+            midPoint1.translate(-countryOffsetX, -countryOffsetY);
+            midPoint1.scale(scaleX, scaleY);
+            midPoint2.translate(-countryOffsetX, -countryOffsetY);
+            midPoint2.scale(scaleX, scaleY);
+            rotCp1.translate(-countryOffsetX, -countryOffsetY);
+            rotCp1.scale(scaleX, scaleY);
+            rotCp2.translate(-countryOffsetX, -countryOffsetY);
+            rotCp2.scale(scaleX, scaleY);
+
+            final Point cp1;
+            final Point cp2;
+            if (xy2.getX() > xy1.getX()) {
+                cp1 = Helper.rotatePointAroundRotationCenter(rotCp1, xy1, -cpAngle);
+                cp2 = Helper.rotatePointAroundRotationCenter(rotCp2, xy2, cpAngle);
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(xy1.getX(), xy1.getY());
+                overlayCtx.bezierCurveTo(cp1.getX(), cp1.getY(), cp2.getX(), cp2.getY(), xy2.getX(), xy2.getY());
+            } else {
+                cp1 = Helper.rotatePointAroundRotationCenter(rotCp1, xy1, cpAngle);
+                cp2 = Helper.rotatePointAroundRotationCenter(rotCp2, xy2, -cpAngle);
+                overlayCtx.beginPath();
+                overlayCtx.moveTo(xy2.getX(), xy2.getY());
+                overlayCtx.bezierCurveTo(cp2.getX(), cp2.getY(), cp1.getX(), cp1.getY(), xy1.getX(), xy1.getY());
+            }
+
+            overlayCtx.setLineWidth(connection.getLineWidth());
+            if (connection.getGradientFill()) {
+                LinearGradient gradient = new LinearGradient(xy1.getX(), xy1.getY(), xy2.getX(), xy2.getY(), false, CycleMethod.NO_CYCLE,
+                                                             new Stop(0.0, connection.getTargetColor()),
+                                                             new Stop(0.5, connection.getSourceColor()),
+                                                             new Stop(1.0, connection.getSourceColor()));
+                overlayCtx.setStroke(gradient);
+            } else {
+                overlayCtx.setStroke(connection.isSelected() ? connection.getSelectedStroke() : connection.getStroke());
+            }
+            overlayCtx.stroke();
+
+            // Draw arrows
+            final Point  pointNearStart = Helper.getCubicBezierXYatT(xy1, cp1, cp2, xy2, 0.01);
+            final double dx             = xy1.getX() - pointNearStart.getX();
+            final double dy             = xy1.getY() - pointNearStart.getY();
+            final double angleAtEnd     = Math.toDegrees(Math.atan2(dy, dx));
+
+            if (connection.getArrowsVisible()) {
+                final double arrowSize = connection.getLineWidth() * 1.5;
+                overlayCtx.beginPath();
+                overlayCtx.save();
+                if (connection.getGradientFill()) {
+                    overlayCtx.setFill(connection.getTargetColor());
+                } else {
+                    overlayCtx.setFill(connection.isSelected() ? connection.getSelectedStroke() : connection.getStroke());
+                }
+                overlayCtx.translate(xy1.getX(), xy1.getY());
+                overlayCtx.rotate(angleAtEnd);
+                overlayCtx.moveTo(-arrowSize * 3, 0);
+                overlayCtx.lineTo(-arrowSize * 3, -arrowSize * 2); // Point 1 of arrow
+                overlayCtx.lineTo(0, 0);
+                overlayCtx.lineTo(-arrowSize * 3, arrowSize * 2); // Point 2 of arrow
+                overlayCtx.lineTo(-arrowSize * 3, 0);
+                overlayCtx.closePath();
+                overlayCtx.fill();
+                overlayCtx.restore();
             }
         }
     }

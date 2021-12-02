@@ -1,6 +1,11 @@
 package eu.hansolo.fx.countries;
 
+import eu.hansolo.fx.countries.tools.Connection;
+import eu.hansolo.fx.countries.tools.ConnectionBuilder;
+import eu.hansolo.fx.countries.tools.ConnectionPartType;
 import eu.hansolo.fx.countries.tools.Helper;
+import eu.hansolo.fx.countries.tools.Location;
+import eu.hansolo.fx.countries.tools.LocationBuilder;
 import eu.hansolo.fx.countries.tools.Poi;
 import eu.hansolo.fx.countries.tools.PoiBuilder;
 import eu.hansolo.fx.countries.tools.Point;
@@ -29,6 +34,10 @@ public class DemoCountryPane extends Application {
         List<Poi>   pois         = new ArrayList<>();
         List<Point> heatmapSpots = new ArrayList<>();
 
+        Location   fmo      = LocationBuilder.create().name("FMO").latitude(52.1307).longitude(7.6941).connectionPartType(ConnectionPartType.SOURCE).build();
+        Location   muc      = LocationBuilder.create().name("MUC").latitude(48.3510).longitude(11.7764).connectionPartType(ConnectionPartType.TARGET).build();
+        Connection fmoToMuc = ConnectionBuilder.create(fmo, muc).arrowsVisible(true).lineWidth(2).stroke(Color.CYAN).build();
+
         Poi muenster = PoiBuilder.create()
                                  .lat(51.91183747470598)
                                  .lon(7.633806255269727)
@@ -55,6 +64,9 @@ public class DemoCountryPane extends Application {
                                         .poiTextVisible(true)
                                         .heatmapVisible(true)
                                         .heatmapSpots(heatmapSpots)
+                                        .heatmapSpotRadius(10)
+                                        .connections(List.of(fmoToMuc))
+                                        .overlayVisible(true)
                                         .build();
     }
 
@@ -69,8 +81,6 @@ public class DemoCountryPane extends Application {
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
-        //countryPane.addHeatmapSpot(new Point(7.633806255269727, 51.91183747470598));
-        //countryPane.setHeatmapSpots(spots);
     }
 
 

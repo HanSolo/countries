@@ -58,6 +58,11 @@ public class Point implements Comparable<Point> {
         y *= sy;
     }
 
+    public void translate(final double dx, final double dy) {
+        x += dx;
+        y += dy;
+    }
+
     @Override public String toString() {
         return new StringBuilder().append("{")
                                   .append("\"x\":").append(x).append(",")

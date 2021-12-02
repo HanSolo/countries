@@ -53,6 +53,12 @@ public class Poi {
         this.lat = lonlat.getY();
     }
 
+    public Point getLatLon() { return new Point(lat, lon); }
+    public void setLatLon(final Point latlon) {
+        this.lat = latlon.getY();
+        this.lon = latlon.getX();
+    }
+
     public String getName() { return name; }
     public void setName(final String name) { this.name = name; }
 
@@ -79,4 +85,12 @@ public class Poi {
 
     public Dimension2D getSvgPathDim() { return svgPathDim; }
     public void setSvgPathDim(final Dimension2D svgPathDim) { this.svgPathDim = svgPathDim; }
+
+    public Location toLocation() {
+        return LocationBuilder.create().name(getName()).fill(getFill()).stroke(getStroke()).latitude(getLat()).longitude(getLon()).build();
+    }
+
+    public static Poi fromLocation(final Location location) {
+        return new Poi(location.getLatitude(), location.getLongitude(), location.getName(), "", null, PointSize.NORMAL, location.getFill(), location.getStroke(), null, null, null);
+    }
 }

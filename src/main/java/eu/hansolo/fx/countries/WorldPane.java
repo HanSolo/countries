@@ -277,6 +277,7 @@ public class WorldPane extends Region implements EvtObserver<Connection> {
         showing.addListener(o -> {
             if (showing.get()) {
                 resize();
+                heatmap.clearHeatMap();
                 List<Point> scaledSpots = new ArrayList<>();
                 heatmapSpots.forEach(spot -> {
                     final Point  p = Helper.latLonToXY(spot);

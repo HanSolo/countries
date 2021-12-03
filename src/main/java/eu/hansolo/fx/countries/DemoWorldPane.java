@@ -38,7 +38,7 @@ public class DemoWorldPane extends Application {
                                    .collect(Collectors.toList());
 
         Map<String,Airport> airports = Helper.getAirports();
-
+        
         Location fmo = airports.get("FMO").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
         Location sin = airports.get("SIN").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
         Location jfk = airports.get("JFK").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();

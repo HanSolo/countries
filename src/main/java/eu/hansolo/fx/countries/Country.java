@@ -7,6 +7,7 @@ import eu.hansolo.fx.countries.tools.CountryPath;
 import eu.hansolo.fx.countries.tools.Helper;
 import eu.hansolo.fx.countries.tools.Location;
 import eu.hansolo.fx.countries.tools.Point;
+import eu.hansolo.fx.countries.tools.Records.Airport;
 import eu.hansolo.fx.countries.tools.Records.City;
 import eu.hansolo.fx.countries.tools.Resolution;
 import eu.hansolo.fx.countries.tools.ValueObject;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 
 public enum Country {
@@ -324,6 +326,10 @@ public enum Country {
     }
 
     public Optional<City> getCapital() { return Cities.INSTANCE.capitals().parallelStream().filter(city -> city.country() == Country.this).findFirst(); }
+
+    public List<City> getCities() { return Helper.getCities().stream().filter(city -> city.country() == Country.this).collect(Collectors.toList()); }
+
+    public List<Airport> getAirports() { return Helper.getAirports().entrySet().stream().filter(entry -> entry.getValue().country() == Country.this).map(entry -> entry.getValue()).collect(Collectors.toList()); }
 
     public List<CountryPath> getPaths() { return getCountryPaths().get(Country.this); }
 

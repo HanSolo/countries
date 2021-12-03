@@ -44,6 +44,8 @@ valueObject;
 With the library also comes a City class which contains information about it's location (lat/lon),
 it's population (if available), the info if it is a capital and the country it belongs to.
 There is a method getCities() in the Helper class that returns the complete list of cities (~41000).
+In addition there is also an Airport class which contains 8665 airports with their name, country and
+IATA code. There is a method getAirports() in the Helper class that returns the coplete list of airports.
 
 The WorldPane simply shows all available countries which gives you the whole world.
 To get a better understanding on how it works just take a look at the DemoWorldPane class.

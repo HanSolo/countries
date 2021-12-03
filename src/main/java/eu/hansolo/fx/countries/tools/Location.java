@@ -1,5 +1,6 @@
 package eu.hansolo.fx.countries.tools;
 
+import eu.hansolo.fx.countries.Country;
 import eu.hansolo.fx.countries.evt.EvtType;
 import eu.hansolo.fx.countries.evt.Evt;
 import eu.hansolo.fx.countries.evt.EvtObserver;
@@ -17,6 +18,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -55,6 +57,7 @@ public class Location {
     private       ObjectProperty<Color>       fill;
     private       Color                       _stroke;
     private       ObjectProperty<Color>       stroke;
+    private       Optional<Country>           country;
     private       ConnectionPartType          connectionPartType;
     private       List<EvtObserver<Location>> observers;
     private       EventHandler<MouseEvent>    mouseEnterHandler;
@@ -97,6 +100,7 @@ public class Location {
         _info              = info;
         _fill              = fill;
         _stroke            = stroke;
+        country            = Optional.empty();
         connectionPartType = ConnectionPartType.NONE;
         observers          = new CopyOnWriteArrayList<>();
     }
@@ -267,6 +271,13 @@ public class Location {
             _stroke = null;
         }
         return stroke;
+    }
+
+    public Optional<Country> getCountry() { return country ;}
+    public void setCountry(final Country country) { setCountry(Optional.of(country)); }
+    public void setCountry(final Optional<Country> country) {
+        this.country = country;
+        fireEvt(UPDATE_EVENT);
     }
 
     public ConnectionPartType getConnectionPartType() { return connectionPartType; }

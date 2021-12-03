@@ -17,6 +17,7 @@
 package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.Country;
+import eu.hansolo.fx.countries.tools.Records.Airport;
 import eu.hansolo.fx.countries.tools.Records.City;
 import javafx.animation.Interpolator;
 import javafx.scene.paint.Color;
@@ -44,8 +45,10 @@ import java.util.stream.Stream;
 
 
 public class Helper {
-    private static final List<City> cities   = new ArrayList<>();
-    private static final List<City> capitals = new ArrayList<>();
+    private static final List<City>           cities   = new ArrayList<>();
+    private static final List<City>           capitals = new ArrayList<>();
+    private static final Map<String, Airport> airports = new HashMap<>();
+
 
     public static final int clamp(final int min, final int max, final int value) {
         if (value < min) return min;
@@ -117,6 +120,33 @@ public class Helper {
             capitals.addAll(getCities().stream().filter(city -> city.isCapital()).collect(Collectors.toList()));
         }
         return capitals;
+    }
+
+    public static final Map<String, Airport> getAirports() {
+        if (airports.isEmpty()) {
+            try {
+                // size,name,iso2,iata,lat,lon
+                Path path = Paths.get(Helper.class.getResource("../airports.txt").toURI());
+                Stream<String> lines = Files.lines(path);
+                lines.skip(1).forEach(line -> {
+                    String[]          airportParts = line.split(",");
+                    Size              size         = Size.fromText(airportParts[0]);
+                    String            name         = airportParts[1];
+                    Optional<Country> countryOpt   = Country.fromIso2(airportParts[2]);
+                    Country           country      = countryOpt.isPresent() ? countryOpt.get() : null;
+                    String            iata         = airportParts[3];
+                    double            lat          = Double.parseDouble(airportParts[4]);
+                    double            lon          = Double.parseDouble(airportParts[5]);
+
+                    if (null != country) { airports.put(iata, new Airport(name, lat, lon, country, size, iata)); }
+                });
+
+                lines.close();
+            } catch (URISyntaxException | IOException e) {
+                System.out.println(e);
+            }
+        }
+        return airports;
     }
 
     public static final Map<String, List<CountryPath>> createCountryPaths(final Resolution resolution) {

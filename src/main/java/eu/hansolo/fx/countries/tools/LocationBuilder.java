@@ -1,5 +1,6 @@
 package eu.hansolo.fx.countries.tools;
 
+import eu.hansolo.fx.countries.Country;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Optional;
 
 
 public class LocationBuilder<B extends LocationBuilder<B>> {
@@ -66,6 +68,11 @@ public class LocationBuilder<B extends LocationBuilder<B>> {
         return (B) this;
     }
 
+    public final B country(final Country country) {
+        properties.put("country", new SimpleObjectProperty<>(Optional.of(country)));
+        return (B)this;
+    }
+
     public final B connectionPartType(final ConnectionPartType connectionPartType) {
         properties.put("connectionPartType", new SimpleObjectProperty<>(connectionPartType));
         return (B) this;
@@ -93,6 +100,8 @@ public class LocationBuilder<B extends LocationBuilder<B>> {
                 location.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
             } else if ("connectionPartType".equals(key)) {
                 location.setConnectionPartType(((ObjectProperty<ConnectionPartType>) properties.get(key)).get());
+            } else if ("country".equals(key)) {
+                location.setCountry(((ObjectProperty<Optional<Country>>) properties.get(key)).get());
             }
         });
         return location;

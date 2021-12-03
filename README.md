@@ -61,3 +61,9 @@ The CountryPane shows just one country. To see how to use it please take a look 
 DemoCountryPane class.
 
 ![DemoCountryPane](https://raw.githubusercontent.com/HanSolo/countries/main/DemoCountryPane.png)
+
+
+## Credits
+Flag icons made by [Freepik](https://www.flaticon.com/authors/freepik)
+
+World cities are provided by [simplemaps](https://simplemaps.com/data/world-cities)

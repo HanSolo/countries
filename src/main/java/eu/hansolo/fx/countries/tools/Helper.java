@@ -24,8 +24,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -91,11 +93,10 @@ public class Helper {
 
     public static final List<City> getCities() {
         if (cities.isEmpty()) {
-            try {
-                // city,city_ascii,lat,lng,country,iso2,iso3,admin_name,capital,population
-                Path path = Paths.get(Helper.class.getResource("../cities.txt").toURI());
-                Stream<String> lines = Files.lines(path);
-                lines.skip(1).forEach(line -> {
+            try(InputStream in = Helper.class.getResourceAsStream(Constants.CITIES_FILE);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                Stream<String> lines = reader.lines();
+                lines.forEach(line -> {
                     String[]          cityParts  = line.split(",");
                     String            name       = cityParts[0];
                     double            lat        = Double.parseDouble(cityParts[2]);
@@ -107,10 +108,9 @@ public class Helper {
 
                     if (null != country) { cities.add(new City(name, lat, lon, country, capital, population)); }
                 });
-
                 lines.close();
-            } catch (URISyntaxException | IOException e) {
-                System.out.println(e);
+            } catch (IOException e) {
+
             }
         }
         return cities;
@@ -125,11 +125,11 @@ public class Helper {
 
     public static final Map<String, Airport> getAirports() {
         if (airports.isEmpty()) {
-            try {
-                // size,name,iso2,iata,lat,lon
-                Path path = Paths.get(Helper.class.getResource("../airports.txt").toURI());
-                Stream<String> lines = Files.lines(path);
-                lines.skip(1).forEach(line -> {
+            // size,name,iso2,iata,lat,lon
+            try(InputStream in = Helper.class.getResourceAsStream(Constants.AIRPORTS_FILE);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                Stream<String> lines = reader.lines();
+                lines.forEach(line -> {
                     String[]          airportParts = line.split(",");
                     Size              size         = Size.fromText(airportParts[0]);
                     String            name         = airportParts[1];
@@ -140,10 +140,9 @@ public class Helper {
 
                     if (countryOpt.isPresent()) { airports.put(iata, new Airport(name, lat, lon, countryOpt.get(), size, iata)); }
                 });
-
                 lines.close();
-            } catch (URISyntaxException | IOException e) {
-                System.out.println(e);
+            } catch (IOException e) {
+
             }
         }
         return airports;
@@ -151,22 +150,21 @@ public class Helper {
 
     public static final Map<Country, Long> getPopulations() {
         if (populations.isEmpty()) {
-            try {
-                // iso2,population
-                Path path = Paths.get(Helper.class.getResource("../population_2020.txt").toURI());
-                Stream<String> lines = Files.lines(path);
-                lines.skip(1).forEach(line -> {
+            // iso2,population
+            try(InputStream in = Helper.class.getResourceAsStream(Constants.POPULATION_FILE);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                Stream<String> lines  = reader.lines();
+                lines.forEach(line -> {
                     String[]          populationParts = line.split(",");
-                    String            countryIso2  = populationParts[0];
-                    Optional<Country> countryOpt   = Country.fromIso2(countryIso2);
-                    Long              population   = Long.valueOf(populationParts[1]);
-
+                    String            countryIso2     = populationParts[0];
+                    Optional<Country> countryOpt      = Country.fromIso2(countryIso2);
+                    Long              population      = Long.valueOf(populationParts[1]);
                     if (countryOpt.isPresent()) { populations.put(countryOpt.get(), population); }
                 });
-
                 lines.close();
-            } catch (URISyntaxException | IOException e) {
-                System.out.println(e);
+            }
+            catch (IOException e) {
+
             }
         }
         return populations;

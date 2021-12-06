@@ -341,8 +341,8 @@ public enum Country {
         return Arrays.asList(values()).parallelStream().filter(country -> country.name().equalsIgnoreCase(iso2)).findFirst();
     }
 
-    public static final Optional<Country> fromText(final String text) {
-        return getAsList().parallelStream().filter(country -> country.name().toLowerCase().equals(text.toLowerCase())).findFirst();
+    public static final Optional<Country> fromName(final String text) {
+        return getAsList().parallelStream().filter(country -> country.getDisplayName().equalsIgnoreCase(text)).findFirst();
     }
 
     public static final Map<Country, List<CountryPath>> getCountryPaths() {

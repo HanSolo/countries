@@ -56,4 +56,8 @@ public class Constants {
      * Properties file that contains low resolution svg paths for all countries
      */
     public static final String LORES_PROPERTIES  = "eu/hansolo/fx/countries/lores.properties";
+
+    public static final String CITIES_FILE       = "cities.txt";
+    public static final String AIRPORTS_FILE     = "airports.txt";
+    public static final String POPULATION_FILE   = "population_2020.txt";
 }

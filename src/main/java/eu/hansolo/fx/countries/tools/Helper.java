@@ -45,9 +45,10 @@ import java.util.stream.Stream;
 
 
 public class Helper {
-    private static final List<City>           cities   = new ArrayList<>();
-    private static final List<City>           capitals = new ArrayList<>();
-    private static final Map<String, Airport> airports = new HashMap<>();
+    private static final List<City>           cities      = new ArrayList<>();
+    private static final List<City>           capitals    = new ArrayList<>();
+    private static final Map<String, Airport> airports    = new HashMap<>();
+    private static final Map<Country, Long>   populations = new HashMap<>();
 
 
     public static final int clamp(final int min, final int max, final int value) {
@@ -133,12 +134,11 @@ public class Helper {
                     Size              size         = Size.fromText(airportParts[0]);
                     String            name         = airportParts[1];
                     Optional<Country> countryOpt   = Country.fromIso2(airportParts[2]);
-                    Country           country      = countryOpt.isPresent() ? countryOpt.get() : null;
                     String            iata         = airportParts[3];
                     double            lat          = Double.parseDouble(airportParts[4]);
                     double            lon          = Double.parseDouble(airportParts[5]);
 
-                    if (null != country) { airports.put(iata, new Airport(name, lat, lon, country, size, iata)); }
+                    if (countryOpt.isPresent()) { airports.put(iata, new Airport(name, lat, lon, countryOpt.get(), size, iata)); }
                 });
 
                 lines.close();
@@ -147,6 +147,29 @@ public class Helper {
             }
         }
         return airports;
+    }
+
+    public static final Map<Country, Long> getPopulations() {
+        if (populations.isEmpty()) {
+            try {
+                // iso2,population
+                Path path = Paths.get(Helper.class.getResource("../population_2020.txt").toURI());
+                Stream<String> lines = Files.lines(path);
+                lines.skip(1).forEach(line -> {
+                    String[]          populationParts = line.split(",");
+                    String            countryIso2  = populationParts[0];
+                    Optional<Country> countryOpt   = Country.fromIso2(countryIso2);
+                    Long              population   = Long.valueOf(populationParts[1]);
+
+                    if (countryOpt.isPresent()) { populations.put(countryOpt.get(), population); }
+                });
+
+                lines.close();
+            } catch (URISyntaxException | IOException e) {
+                System.out.println(e);
+            }
+        }
+        return populations;
     }
 
     public static final Map<String, List<CountryPath>> createCountryPaths(final Resolution resolution) {

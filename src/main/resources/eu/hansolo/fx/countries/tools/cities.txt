@@ -522,7 +522,7 @@ Muscat,Muscat,23.6139,58.5922,Oman,OM,OMN,Masqaţ,primary,1421409
 Hebi,Hebi,35.7497,114.2887,China,CN,CHN,Henan,,1419000
 Bronx,Bronx,40.8501,-73.8662,United States,US,USA,New York,,1418207
 Gaozhou,Gaozhou,21.9135,110.8481,China,CN,CHN,Guangdong,,1414100
-The Hague,The Hague,52.0767,4.2986,Netherlands,NL,NLD,Zuid-Holland,primary,1406000
+The Hague,The Hague,52.0767,4.2986,Netherlands,NL,NLD,Zuid-Holland,admin,1406000
 Owerri,Owerri,5.4833,7.0333,Nigeria,NG,NGA,Imo,admin,1401873
 Sharjah,Sharjah,25.3575,55.3919,United Arab Emirates,AE,ARE,Ash Shāriqah,admin,1400000
 Farīdābād,Faridabad,28.4333,77.3167,India,IN,IND,Haryāna,,1394000

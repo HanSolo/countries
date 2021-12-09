@@ -274,6 +274,7 @@ public class Helper {
         return new double[]{ latitude, longitude };
     }
 
+
     public static final Properties readProperties(final String filename) {
         final ClassLoader loader     = Thread.currentThread().getContextClassLoader();
         final Properties  properties = new Properties();

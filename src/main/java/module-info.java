@@ -11,6 +11,7 @@ module eu.hansolo.fx.countries {
     requires transitive javafx.swing;
 
     // 3rd Party
+    requires transitive eu.hansolo.toolbox;
 
     exports eu.hansolo.fx.countries;
     exports eu.hansolo.fx.countries.evt;

@@ -1,7 +1,6 @@
 package eu.hansolo.fx.countries;
 
-import eu.hansolo.fx.countries.evt.Evt;
-import eu.hansolo.fx.countries.evt.EvtObserver;
+import eu.hansolo.fx.countries.evt.CountryEvt;
 import eu.hansolo.fx.countries.font.Fonts;
 import eu.hansolo.fx.countries.tools.ColorMapping;
 import eu.hansolo.fx.countries.tools.Connection;
@@ -15,6 +14,9 @@ import eu.hansolo.fx.countries.tools.Mapping;
 import eu.hansolo.fx.countries.tools.OpacityDistribution;
 import eu.hansolo.fx.countries.tools.Poi;
 import eu.hansolo.fx.countries.tools.Point;
+import eu.hansolo.toolbox.evt.Evt;
+import eu.hansolo.toolbox.evt.EvtObserver;
+import eu.hansolo.toolbox.evt.EvtType;
 import javafx.application.Platform;
 import javafx.beans.DefaultProperty;
 import javafx.beans.binding.Bindings;
@@ -68,7 +70,7 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 
 @DefaultProperty("children")
-public class WorldPane extends Region implements EvtObserver<Connection> {
+public class WorldPane extends Region implements EvtObserver<CountryEvt<Connection>> {
     private static final double                          PREFERRED_WIDTH  = 1009;
     private static final double                          PREFERRED_HEIGHT = 665;
     private static final double                          MINIMUM_WIDTH    = 50;
@@ -780,11 +782,10 @@ public class WorldPane extends Region implements EvtObserver<Connection> {
         if (null != handler) handler.handle(event);
     }
 
-    @Override public void onEvt(final Evt<Connection> evt) {
-        switch(evt.getEventType()) {
-            case UPDATE   -> { if (overlay.isVisible()) { redrawOverlay(); } }
-            case SELECTED -> { if (overlay.isVisible()) { redrawOverlay(); } }
-        }
+    @Override public void handle(final CountryEvt<Connection> evt) {
+        EvtType<? extends Evt> type = evt.getEvtType();
+        if (type.equals(CountryEvt.UPDATE)) { if (overlay.isVisible()) { redrawOverlay(); } }
+        else if (type.equals(CountryEvt.SELECTED)) { if (overlay.isVisible()) { redrawOverlay(); } }
     }
 
 

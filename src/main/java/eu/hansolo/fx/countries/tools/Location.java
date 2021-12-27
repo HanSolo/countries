@@ -1,9 +1,9 @@
 package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.Country;
-import eu.hansolo.fx.countries.evt.EvtType;
-import eu.hansolo.fx.countries.evt.Evt;
-import eu.hansolo.fx.countries.evt.EvtObserver;
+import eu.hansolo.fx.countries.evt.CountryEvt;
+import eu.hansolo.toolbox.evt.EvtObserver;
+import eu.hansolo.toolbox.geom.CardinalDirection;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.DoublePropertyBase;
 import javafx.beans.property.ObjectProperty;
@@ -23,47 +23,30 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Location {
-    public enum CardinalDirection {
-        N("North", 348.75, 11.25), NNE("North North-East", 11.25, 33.75), NE("North-East", 33.75, 56.25), ENE("East North-East", 56.25, 78.75), E("East", 78.75, 101.25), ESE("East South-East", 101.25, 123.75),
-        SE("South-East", 123.75, 146.25), SSE("South South-East", 146.25, 168.75), S("South", 168.75, 191.25), SSW("South South-West", 191.25, 213.75), SW("South-West", 213.75, 236.25), WSW("West South-West", 236.25, 258.75),
-        W("West", 258.75, 281.25), WNW("West North-West", 281.25, 303.75), NW("North-West", 303.75, 326.25), NNW("North North-West", 326.25, 348.75);
-
-        public String direction;
-        public double from;
-        public double to;
-
-        CardinalDirection(final String DIRECTION, final double FROM, final double TO) {
-            direction = DIRECTION;
-            from = FROM;
-            to = TO;
-        }
-    }
-
-
-    private final Evt<Location>               UPDATE_EVENT = new Evt<>(Location.this, EvtType.UPDATE);
-    private       String                      _name;
-    private       StringProperty              name;
-    private       Instant                     _timestamp;
-    private       ObjectProperty<Instant>     timestamp;
-    private       double                      _latitude;
-    private       DoubleProperty              latitude;
-    private       double                      _longitude;
-    private       DoubleProperty              longitude;
-    private       double                      _altitude;
-    private       DoubleProperty              altitude;
-    private       String                      _info;
-    private       StringProperty              info;
-    private       Color                       _fill;
-    private       ObjectProperty<Color>       fill;
-    private       Color                       _stroke;
-    private       ObjectProperty<Color>       stroke;
-    private       Optional<Country>           country;
-    private       ConnectionPartType          connectionPartType;
-    private       List<EvtObserver<Location>> observers;
-    private       EventHandler<MouseEvent>    mouseEnterHandler;
-    private       EventHandler<MouseEvent>    mousePressHandler;
-    private       EventHandler<MouseEvent>    mouseReleaseHandler;
-    private       EventHandler<MouseEvent>    mouseExitHandler;
+    private final CountryEvt<Location>                    UPDATE_EVENT = new CountryEvt<>(Location.this, CountryEvt.LOCATION, Location.this);
+    private       String                                  _name;
+    private       StringProperty                          name;
+    private       Instant                                 _timestamp;
+    private       ObjectProperty<Instant>                 timestamp;
+    private       double                                  _latitude;
+    private       DoubleProperty                          latitude;
+    private       double                                  _longitude;
+    private       DoubleProperty                          longitude;
+    private       double                                  _altitude;
+    private       DoubleProperty                          altitude;
+    private       String                                  _info;
+    private       StringProperty                          info;
+    private       Color                                   _fill;
+    private       ObjectProperty<Color>                   fill;
+    private       Color                                   _stroke;
+    private       ObjectProperty<Color>                   stroke;
+    private       Optional<Country>                       country;
+    private       ConnectionPartType                      connectionPartType;
+    private       List<EvtObserver<CountryEvt<Location>>> observers;
+    private       EventHandler<MouseEvent>                mouseEnterHandler;
+    private       EventHandler<MouseEvent>                mousePressHandler;
+    private       EventHandler<MouseEvent>                mouseReleaseHandler;
+    private       EventHandler<MouseEvent>                mouseExitHandler;
 
 
     // ******************** Constructors **************************************
@@ -381,12 +364,12 @@ public class Location {
 
 
     // ******************** Event Handling ************************************
-    public void setOnEvt(final EvtObserver<Location> observer) { addEvtObserver(observer); }
-    public void addEvtObserver(final EvtObserver<Location> observer) { if (!observers.contains(observer)) observers.add(observer); }
-    public void removeEvtObserver(final EvtObserver<Location> observer) { if (observers.contains(observer)) observers.remove(observer); }
+    public void setOnEvt(final EvtObserver<CountryEvt<Location>> observer) { addEvtObserver(observer); }
+    public void addEvtObserver(final EvtObserver<CountryEvt<Location>> observer) { if (!observers.contains(observer)) observers.add(observer); }
+    public void removeEvtObserver(final EvtObserver<CountryEvt<Location>> observer) { if (observers.contains(observer)) observers.remove(observer); }
 
-    public void fireEvt(final Evt<Location> evt) {
-        for (EvtObserver<Location> observer : observers) { observer.onEvt(evt); }
+    public void fireEvt(final CountryEvt<Location> evt) {
+        observers.forEach(observer -> observer.handle(evt));
     }
 
 

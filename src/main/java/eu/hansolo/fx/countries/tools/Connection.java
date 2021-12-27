@@ -1,15 +1,13 @@
 package eu.hansolo.fx.countries.tools;
 
-import eu.hansolo.fx.countries.evt.Evt;
-import eu.hansolo.fx.countries.evt.EvtObserver;
-import eu.hansolo.fx.countries.evt.EvtType;
+import eu.hansolo.fx.countries.evt.CountryEvt;
+import eu.hansolo.toolbox.evt.EvtObserver;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.DoublePropertyBase;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.StringPropertyBase;
 import javafx.scene.paint.Color;
@@ -19,35 +17,35 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Connection {
-    private final Evt<Connection>               SELECTED_EVENT = new Evt<>(Connection.this, EvtType.SELECTED);
-    private final Evt<Connection>               UPDATED_EVENT  = new Evt<>(Connection.this, EvtType.UPDATE);
-    private       List<EvtObserver<Connection>> observers;
-    private       Location                      _sourceLocation;
-    private       ObjectProperty<Location>      sourceLocation;
-    private       Location                      _targetLocation;
-    private       ObjectProperty<Location>      targetLocation;
-    private       String                        _name;
-    private       StringProperty                name;
-    private       double                        _value;
-    private       DoubleProperty                value;
-    private       Color                         _stroke;
-    private       ObjectProperty<Color>         stroke;
-    private       Color                         _sourceColor;
-    private       ObjectProperty<Color>         sourceColor;
-    private       Color                         _targetColor;
-    private       ObjectProperty<Color>         targetColor;
-    private       boolean                       _gradientFill;
-    private       BooleanProperty               gradientFill;
-    private       Color                         _selectedStroke;
-    private       ObjectProperty<Color>         selectedStroke;
-    private       double                        _lineWidth;
-    private       DoubleProperty                lineWidth;
-    private       boolean                       _arrowsVisible;
-    private       BooleanProperty               arrowsVisible;
-    private       String                        _tooltipText;
-    private       StringProperty                tooltipText;
-    private       boolean                       _selected;
-    private       BooleanProperty               selected;
+    private final CountryEvt<Connection>                    SELECTED_EVENT = new CountryEvt<>(Connection.this, CountryEvt.SELECTED, Connection.this);
+    private final CountryEvt<Connection>                    UPDATED_EVENT  = new CountryEvt<>(Connection.this, CountryEvt.UPDATE, Connection.this);
+    private       List<EvtObserver<CountryEvt<Connection>>> observers;
+    private       Location                                  _sourceLocation;
+    private       ObjectProperty<Location>                  sourceLocation;
+    private       Location                                  _targetLocation;
+    private       ObjectProperty<Location>                  targetLocation;
+    private       String                                    _name;
+    private       StringProperty                            name;
+    private       double                                    _value;
+    private       DoubleProperty                            value;
+    private       Color                                     _stroke;
+    private       ObjectProperty<Color>                     stroke;
+    private       Color                                     _sourceColor;
+    private       ObjectProperty<Color>                     sourceColor;
+    private       Color                                     _targetColor;
+    private       ObjectProperty<Color>                     targetColor;
+    private       boolean                                   _gradientFill;
+    private       BooleanProperty                           gradientFill;
+    private       Color                                     _selectedStroke;
+    private       ObjectProperty<Color>                     selectedStroke;
+    private       double                                    _lineWidth;
+    private       DoubleProperty                            lineWidth;
+    private       boolean                                   _arrowsVisible;
+    private       BooleanProperty                           arrowsVisible;
+    private       String                                    _tooltipText;
+    private       StringProperty                            tooltipText;
+    private       boolean                                   _selected;
+    private       BooleanProperty                           selected;
 
 
     public Connection(final Location sourceLocation, final Location targetLocation) {
@@ -369,12 +367,12 @@ public class Connection {
 
 
     // ******************** Event Handling ************************************
-    public void setOnEvt(final EvtObserver observer) { addEvtObserver(observer); }
-    public void addEvtObserver(final EvtObserver observer) { if (!observers.contains(observer)) observers.add(observer); }
-    public void removeEvtObserver(final EvtObserver observer) { if (observers.contains(observer)) observers.remove(observer); }
+    public void setOnEvt(final EvtObserver<CountryEvt<Connection>> observer) { addEvtObserver(observer); }
+    public void addEvtObserver(final EvtObserver<CountryEvt<Connection>> observer) { if (!observers.contains(observer)) observers.add(observer); }
+    public void removeEvtObserver(final EvtObserver<CountryEvt<Connection>> observer) { if (observers.contains(observer)) observers.remove(observer); }
 
-    public void fireEvt(final Evt evt) {
-        for (EvtObserver observer : observers) { observer.onEvt(evt); }
+    public void fireEvt(final CountryEvt evt) {
+        for (EvtObserver observer : observers) { observer.handle(evt); }
     }
 }
 

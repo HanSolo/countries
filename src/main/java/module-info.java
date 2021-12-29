@@ -13,6 +13,7 @@ module eu.hansolo.fx.countries {
     // 3rd Party
     requires transitive eu.hansolo.toolbox;
     requires transitive eu.hansolo.toolboxfx;
+    requires transitive eu.hansolo.fx.heatmap;
 
     exports eu.hansolo.fx.countries;
     exports eu.hansolo.fx.countries.evt;

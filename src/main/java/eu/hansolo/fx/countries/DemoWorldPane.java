@@ -10,7 +10,7 @@ import eu.hansolo.toolboxfx.geom.Poi;
 import eu.hansolo.toolboxfx.geom.PoiBuilder;
 import eu.hansolo.toolboxfx.geom.PoiSize;
 import eu.hansolo.toolboxfx.geom.Point;
-import eu.hansolo.toolboxfx.heatmap.OpacityDistribution;
+import eu.hansolo.fx.heatmap.OpacityDistribution;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;

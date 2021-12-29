@@ -1,21 +1,23 @@
 package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.Country;
+import eu.hansolo.toolboxfx.geom.Poi;
+import eu.hansolo.toolboxfx.geom.PoiSize;
 import javafx.scene.paint.Color;
 
 
 public class Records {
     public record City(String name, double lat, double lon, Country country, boolean isCapital, long population){
         public Poi toPoi() {
-            return new Poi(lat, lon, name, country.getIso2(), null, PointSize.NORMAL, Color.CYAN, Color.TRANSPARENT, null, null, null);
+            return new Poi(lat, lon, name, country.getIso2(), null, PoiSize.NORMAL, Color.CYAN, Color.TRANSPARENT, null, null, null);
         }
 
-        public Location toLocation() {
-            return LocationBuilder.create().latitude(lat).longitude(lon).name(name).country(country).build();
+        public CLocation toLocation() {
+            return CLocationBuilder.create().latitude(lat).longitude(lon).name(name).country(country).build();
         }
 
-        public LocationBuilder toLocationBuilder() {
-            return LocationBuilder.create().latitude(lat).longitude(lon).name(name).country(country);
+        public CLocationBuilder toLocationBuilder() {
+            return CLocationBuilder.create().latitude(lat).longitude(lon).name(name).country(country);
         }
 
         @Override public String toString() {
@@ -35,15 +37,15 @@ public class Records {
     public record Airport(String name, double lat, double lon, Country country, Size size, String iata){
 
         public Poi toPoi() {
-            return new Poi(lat, lon, name, iata, null, PointSize.NORMAL, Color.RED, Color.TRANSPARENT, null, null, null);
+            return new Poi(lat, lon, name, iata, null, PoiSize.NORMAL, Color.RED, Color.TRANSPARENT, null, null, null);
         }
 
-        public Location toLocation() {
-            return LocationBuilder.create().latitude(lat).longitude(lon).name(name).info(iata).country(country).build();
+        public CLocation toLocation() {
+            return CLocationBuilder.create().latitude(lat).longitude(lon).name(name).info(iata).country(country).build();
         }
 
-        public LocationBuilder toLocationBuilder() {
-            return LocationBuilder.create().latitude(lat).longitude(lon).name(name).info(iata).country(country);
+        public CLocationBuilder toLocationBuilder() {
+            return CLocationBuilder.create().latitude(lat).longitude(lon).name(name).info(iata).country(country);
         }
 
         @Override public String toString() {

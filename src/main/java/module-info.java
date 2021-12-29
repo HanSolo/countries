@@ -12,10 +12,10 @@ module eu.hansolo.fx.countries {
 
     // 3rd Party
     requires transitive eu.hansolo.toolbox;
+    requires transitive eu.hansolo.toolboxfx;
 
     exports eu.hansolo.fx.countries;
     exports eu.hansolo.fx.countries.evt;
     exports eu.hansolo.fx.countries.flag;
-    exports eu.hansolo.fx.countries.font;
     exports eu.hansolo.fx.countries.tools;
 }

@@ -1,21 +1,21 @@
 package eu.hansolo.fx.countries;
 
 import eu.hansolo.fx.countries.evt.CountryEvt;
-import eu.hansolo.fx.countries.font.Fonts;
-import eu.hansolo.fx.countries.tools.ColorMapping;
 import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.Constants;
-import eu.hansolo.fx.countries.tools.HeatMap;
-import eu.hansolo.fx.countries.tools.HeatMapBuilder;
 import eu.hansolo.fx.countries.tools.Helper;
-import eu.hansolo.fx.countries.tools.Location;
-import eu.hansolo.fx.countries.tools.Mapping;
-import eu.hansolo.fx.countries.tools.OpacityDistribution;
-import eu.hansolo.fx.countries.tools.Poi;
-import eu.hansolo.fx.countries.tools.Point;
+import eu.hansolo.fx.countries.tools.CLocation;
 import eu.hansolo.toolbox.evt.Evt;
 import eu.hansolo.toolbox.evt.EvtObserver;
 import eu.hansolo.toolbox.evt.EvtType;
+import eu.hansolo.toolboxfx.font.Fonts;
+import eu.hansolo.toolboxfx.geom.Poi;
+import eu.hansolo.toolboxfx.geom.Point;
+import eu.hansolo.toolboxfx.heatmap.ColorMapping;
+import eu.hansolo.toolboxfx.heatmap.HeatMap;
+import eu.hansolo.toolboxfx.heatmap.HeatMapBuilder;
+import eu.hansolo.toolboxfx.heatmap.Mapping;
+import eu.hansolo.toolboxfx.heatmap.OpacityDistribution;
 import javafx.application.Platform;
 import javafx.beans.DefaultProperty;
 import javafx.beans.binding.Bindings;
@@ -676,7 +676,7 @@ public class CountryPane extends Region implements EvtObserver<CountryEvt<Connec
                 if (null == poi.getImage() && null == poi.getSvgPath()) {
                     final double r;
                     final double d;
-                    switch (poi.getPointSize()) {
+                    switch (poi.getPoiSize()) {
                         case TINY   -> { r = 0.5; d = 1;  }
                         case SMALL  -> { r = 1;   d = 2;  }
                         case NORMAL -> { r = 1.5; d = 3;  }
@@ -727,8 +727,8 @@ public class CountryPane extends Region implements EvtObserver<CountryEvt<Connec
         overlayCtx.clearRect(0, 0, width, height);
 
         for (Connection connection : connections) {
-            final Location p1 = connection.getTargetLocation();
-            final Location p2 = connection.getSourceLocation();
+            final CLocation p1 = connection.getTargetLocation();
+            final CLocation p2 = connection.getSourceLocation();
 
             if (null == p1 || null == p2) { continue; }
 
@@ -742,20 +742,20 @@ public class CountryPane extends Region implements EvtObserver<CountryEvt<Connec
 
             final double cpAngle  = Helper.getControlPointAngle(xy1, xy2);
 
-            xy1.translate(-countryOffsetX, -countryOffsetY);
-            xy1.scale(scaleX, scaleY);
-            xy2.translate(-countryOffsetX, -countryOffsetY);
-            xy2.scale(scaleX, scaleY);
-            midPoint.translate(-countryOffsetX, -countryOffsetY);
-            midPoint.scale(scaleX, scaleY);
-            midPoint1.translate(-countryOffsetX, -countryOffsetY);
-            midPoint1.scale(scaleX, scaleY);
-            midPoint2.translate(-countryOffsetX, -countryOffsetY);
-            midPoint2.scale(scaleX, scaleY);
-            rotCp1.translate(-countryOffsetX, -countryOffsetY);
-            rotCp1.scale(scaleX, scaleY);
-            rotCp2.translate(-countryOffsetX, -countryOffsetY);
-            rotCp2.scale(scaleX, scaleY);
+            xy1.translateBy(-countryOffsetX, -countryOffsetY);
+            xy1.scaleBy(scaleX, scaleY);
+            xy2.translateBy(-countryOffsetX, -countryOffsetY);
+            xy2.scaleBy(scaleX, scaleY);
+            midPoint.translateBy(-countryOffsetX, -countryOffsetY);
+            midPoint.scaleBy(scaleX, scaleY);
+            midPoint1.translateBy(-countryOffsetX, -countryOffsetY);
+            midPoint1.scaleBy(scaleX, scaleY);
+            midPoint2.translateBy(-countryOffsetX, -countryOffsetY);
+            midPoint2.scaleBy(scaleX, scaleY);
+            rotCp1.translateBy(-countryOffsetX, -countryOffsetY);
+            rotCp1.scaleBy(scaleX, scaleY);
+            rotCp2.translateBy(-countryOffsetX, -countryOffsetY);
+            rotCp2.scaleBy(scaleX, scaleY);
 
             final Point cp1;
             final Point cp2;

@@ -19,6 +19,7 @@ package eu.hansolo.fx.countries.tools;
 import eu.hansolo.fx.countries.Country;
 import eu.hansolo.fx.countries.tools.Records.Airport;
 import eu.hansolo.fx.countries.tools.Records.City;
+import eu.hansolo.toolboxfx.geom.Point;
 import javafx.animation.Interpolator;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;

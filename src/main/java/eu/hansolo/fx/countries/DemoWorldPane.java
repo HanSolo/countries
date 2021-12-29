@@ -4,14 +4,13 @@ import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.ConnectionBuilder;
 import eu.hansolo.fx.countries.tools.ConnectionPartType;
 import eu.hansolo.fx.countries.tools.Helper;
-import eu.hansolo.fx.countries.tools.Location;
-import eu.hansolo.fx.countries.tools.LocationBuilder;
-import eu.hansolo.fx.countries.tools.OpacityDistribution;
-import eu.hansolo.fx.countries.tools.Poi;
-import eu.hansolo.fx.countries.tools.PoiBuilder;
-import eu.hansolo.fx.countries.tools.Point;
-import eu.hansolo.fx.countries.tools.PointSize;
+import eu.hansolo.fx.countries.tools.CLocation;
 import eu.hansolo.fx.countries.tools.Records.Airport;
+import eu.hansolo.toolboxfx.geom.Poi;
+import eu.hansolo.toolboxfx.geom.PoiBuilder;
+import eu.hansolo.toolboxfx.geom.PoiSize;
+import eu.hansolo.toolboxfx.geom.Point;
+import eu.hansolo.toolboxfx.heatmap.OpacityDistribution;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -34,17 +33,17 @@ public class DemoWorldPane extends Application {
     @Override public void init() {
         List<Poi> capitals = Helper.getCapitals()
                                    .stream()
-                                   .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PointSize.NORMAL).build())
+                                   .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PoiSize.NORMAL).build())
                                    .collect(Collectors.toList());
 
         Map<String,Airport> airports = Helper.getAirports();
         
-        Location fmo = airports.get("FMO").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
-        Location sin = airports.get("SIN").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
-        Location jfk = airports.get("JFK").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
-        Location hnd = airports.get("HND").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
-        Location syd = airports.get("SYD").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
-        Location sfo = airports.get("SFO").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
+        CLocation fmo = airports.get("FMO").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation sin = airports.get("SIN").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
+        CLocation jfk = airports.get("JFK").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation hnd = airports.get("HND").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
+        CLocation syd = airports.get("SYD").toLocationBuilder().connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation sfo = airports.get("SFO").toLocationBuilder().connectionPartType(ConnectionPartType.TARGET).build();
 
         Connection fmoToSin = ConnectionBuilder.create(fmo, sin).arrowsVisible(true).lineWidth(2).stroke(Color.CYAN).build();
         Connection jfkToHnd = ConnectionBuilder.create(jfk, hnd).arrowsVisible(true).lineWidth(2).stroke(Color.MAGENTA).build();

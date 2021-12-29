@@ -16,12 +16,12 @@ import java.util.HashMap;
 
 public class ConnectionBuilder<B extends ConnectionBuilder<B>> {
     private final HashMap<String, Property> properties = new HashMap<>();
-    private final Location                  sourceLocation;
-    private final Location                  targetLocation;
+    private final CLocation                 sourceLocation;
+    private final CLocation                 targetLocation;
 
 
     // ******************** Constructors **************************************
-    protected ConnectionBuilder(final Location sourceLocation, final Location targetLocation) {
+    protected ConnectionBuilder(final CLocation sourceLocation, final CLocation targetLocation) {
         if (null == sourceLocation) { throw new IllegalArgumentException("sourceLocation cannot be null"); }
         if (null == targetLocation) { throw new IllegalArgumentException("targetLocation cannot be null"); }
         this.sourceLocation = sourceLocation;
@@ -30,7 +30,7 @@ public class ConnectionBuilder<B extends ConnectionBuilder<B>> {
 
 
     // ******************** Methods *******************************************
-    public static final ConnectionBuilder create(final Location sourceLocation, final Location targetLocation) {
+    public static final ConnectionBuilder create(final CLocation sourceLocation, final CLocation targetLocation) {
         return new ConnectionBuilder(sourceLocation, targetLocation);
     }
 

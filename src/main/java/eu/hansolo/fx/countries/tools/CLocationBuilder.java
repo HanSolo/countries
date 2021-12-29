@@ -15,17 +15,17 @@ import java.util.HashMap;
 import java.util.Optional;
 
 
-public class LocationBuilder<B extends LocationBuilder<B>> {
+public class CLocationBuilder<B extends CLocationBuilder<B>> {
     private final HashMap<String, Property> properties = new HashMap<>();
 
 
     // ******************** Constructors **************************************
-    protected LocationBuilder() {}
+    protected CLocationBuilder() {}
 
 
     // ******************** Methods *******************************************
-    public static final LocationBuilder create() {
-        return new LocationBuilder();
+    public static final CLocationBuilder create() {
+        return new CLocationBuilder();
     }
 
     public final B name(final String name) {
@@ -79,8 +79,8 @@ public class LocationBuilder<B extends LocationBuilder<B>> {
     }
 
 
-    public final Location build() {
-        Location location = new Location();
+    public final CLocation build() {
+        CLocation location = new CLocation();
         properties.forEach((key, property) -> {
             if ("name".equals(key)) {
                 location.setName(((StringProperty) properties.get(key)).get());

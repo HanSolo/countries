@@ -20,10 +20,10 @@ public class Connection {
     private final CountryEvt<Connection>                    SELECTED_EVENT = new CountryEvt<>(Connection.this, CountryEvt.SELECTED, Connection.this);
     private final CountryEvt<Connection>                    UPDATED_EVENT  = new CountryEvt<>(Connection.this, CountryEvt.UPDATE, Connection.this);
     private       List<EvtObserver<CountryEvt<Connection>>> observers;
-    private       Location                                  _sourceLocation;
-    private       ObjectProperty<Location>                  sourceLocation;
-    private       Location                                  _targetLocation;
-    private       ObjectProperty<Location>                  targetLocation;
+    private       CLocation                                 _sourceLocation;
+    private       ObjectProperty<CLocation>                 sourceLocation;
+    private       CLocation                                 _targetLocation;
+    private       ObjectProperty<CLocation>                 targetLocation;
     private       String                                    _name;
     private       StringProperty                            name;
     private       double                                    _value;
@@ -48,34 +48,34 @@ public class Connection {
     private       BooleanProperty                           selected;
 
 
-    public Connection(final Location sourceLocation, final Location targetLocation) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation) {
         this(sourceLocation, targetLocation, "", 0, Color.BLACK, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final Color stroke) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final Color stroke) {
         this(sourceLocation, targetLocation,"", 0, stroke, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name) {
         this(sourceLocation, targetLocation, name, 0, Color.BLACK, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final Color stroke) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final Color stroke) {
         this(sourceLocation, targetLocation, name, 0, stroke, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value) {
         this(sourceLocation, targetLocation, name, value, Color.BLACK, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value, final Color stroke) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value, final Color stroke) {
         this(sourceLocation, targetLocation, name, value, stroke, Color.BLUE, Color.RED, false, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value, final Color sourceColor, final Color targetColor, final boolean gradientFill) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value, final Color sourceColor, final Color targetColor, final boolean gradientFill) {
         this(sourceLocation, targetLocation, name, value, Color.BLACK, sourceColor, targetColor, gradientFill, 1, "");
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value, final Color sourceColor, final Color targetColor, final boolean gradientFill, final String tooltipText) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value, final Color sourceColor, final Color targetColor, final boolean gradientFill, final String tooltipText) {
         this(sourceLocation, targetLocation, name, value, Color.BLACK, sourceColor, targetColor, gradientFill, 1, tooltipText);
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value, final Color stroke, final String tooltipText) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value, final Color stroke, final String tooltipText) {
         this(sourceLocation, targetLocation, name, value, stroke, Color.BLUE, Color.RED, false, 1, tooltipText);
     }
-    public Connection(final Location sourceLocation, final Location targetLocation, final String name, final double value, final Color stroke, final Color sourceColor, final Color targetColor, final boolean gradientFill, final double lineWidth, final String tooltipText) {
+    public Connection(final CLocation sourceLocation, final CLocation targetLocation, final String name, final double value, final Color stroke, final Color sourceColor, final Color targetColor, final boolean gradientFill, final double lineWidth, final String tooltipText) {
         if (ConnectionPartType.SOURCE != sourceLocation.getConnectionPartType()) { throw new IllegalArgumentException("targetLocation needs to be of type SOURCE"); }
         if (ConnectionPartType.TARGET != targetLocation.getConnectionPartType()) { throw new IllegalArgumentException("sourceLocation needs to be of type TARGET"); }
         
@@ -96,8 +96,8 @@ public class Connection {
     }
 
 
-    public Location getTargetLocation() { return null == targetLocation ? _targetLocation : targetLocation.get(); }
-    public void setTargetLocation(final Location targetLocation) {
+    public CLocation getTargetLocation() { return null == targetLocation ? _targetLocation : targetLocation.get(); }
+    public void setTargetLocation(final CLocation targetLocation) {
         if (null == this.targetLocation) {
             _targetLocation = targetLocation;
             fireEvt(UPDATED_EVENT);
@@ -105,9 +105,9 @@ public class Connection {
             this.targetLocation.set(targetLocation);
         }
     }
-    public ObjectProperty<Location> targetLocationProperty() {
+    public ObjectProperty<CLocation> targetLocationProperty() {
         if (null == targetLocation) {
-            targetLocation = new ObjectPropertyBase<Location>(_targetLocation) {
+            targetLocation = new ObjectPropertyBase<CLocation>(_targetLocation) {
                 @Override protected void invalidated() { fireEvt(UPDATED_EVENT); }
                 @Override public Object getBean() { return Connection.this; }
                 @Override public String getName() { return "targetLocation"; }
@@ -117,8 +117,8 @@ public class Connection {
         return targetLocation;
     }
 
-    public Location getSourceLocation() { return null == sourceLocation ? _sourceLocation : sourceLocation.get(); }
-    public void setSourceLocation(final Location sourceLocation) {
+    public CLocation getSourceLocation() { return null == sourceLocation ? _sourceLocation : sourceLocation.get(); }
+    public void setSourceLocation(final CLocation sourceLocation) {
         if (null == this.sourceLocation) {
             _sourceLocation = sourceLocation;
             fireEvt(UPDATED_EVENT);
@@ -127,9 +127,9 @@ public class Connection {
         }
 
     }
-    public ObjectProperty<Location> sourceLocationProperty() {
+    public ObjectProperty<CLocation> sourceLocationProperty() {
         if (null == sourceLocation) {
-            sourceLocation = new ObjectPropertyBase<Location>(_sourceLocation) {
+            sourceLocation = new ObjectPropertyBase<CLocation>(_sourceLocation) {
                 @Override protected void invalidated() { fireEvt(UPDATED_EVENT); }
                 @Override public Object getBean() { return Connection.this; }
                 @Override public String getName() { return "sourceLocation"; }

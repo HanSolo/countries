@@ -1,6 +1,7 @@
 package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.Country;
+import eu.hansolo.toolboxfx.geom.Point;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;

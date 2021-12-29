@@ -2,10 +2,10 @@ package eu.hansolo.fx.countries;
 
 import eu.hansolo.fx.countries.tools.CRegion;
 import eu.hansolo.fx.countries.tools.Connection;
-import eu.hansolo.fx.countries.tools.Mapping;
-import eu.hansolo.fx.countries.tools.OpacityDistribution;
-import eu.hansolo.fx.countries.tools.Poi;
-import eu.hansolo.fx.countries.tools.Point;
+import eu.hansolo.toolboxfx.geom.Poi;
+import eu.hansolo.toolboxfx.geom.Point;
+import eu.hansolo.toolboxfx.heatmap.Mapping;
+import eu.hansolo.toolboxfx.heatmap.OpacityDistribution;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;

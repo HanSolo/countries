@@ -22,13 +22,13 @@ import eu.hansolo.fx.countries.tools.Connection;
 import eu.hansolo.fx.countries.tools.ConnectionBuilder;
 import eu.hansolo.fx.countries.tools.ConnectionPartType;
 import eu.hansolo.fx.countries.tools.Helper;
-import eu.hansolo.fx.countries.tools.Location;
-import eu.hansolo.fx.countries.tools.LocationBuilder;
-import eu.hansolo.fx.countries.tools.OpacityDistribution;
-import eu.hansolo.fx.countries.tools.Poi;
-import eu.hansolo.fx.countries.tools.PoiBuilder;
-import eu.hansolo.fx.countries.tools.Point;
-import eu.hansolo.fx.countries.tools.PointSize;
+import eu.hansolo.fx.countries.tools.CLocation;
+import eu.hansolo.fx.countries.tools.CLocationBuilder;
+import eu.hansolo.toolboxfx.geom.Poi;
+import eu.hansolo.toolboxfx.geom.PoiBuilder;
+import eu.hansolo.toolboxfx.geom.PoiSize;
+import eu.hansolo.toolboxfx.geom.Point;
+import eu.hansolo.toolboxfx.heatmap.OpacityDistribution;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -52,13 +52,13 @@ public class DemoRegionPane extends Application {
         List<Poi>   capitals = Helper.getCapitals()
                                      .stream()
                                      .filter(city -> region.getCountries().contains(city.country()))
-                                     .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PointSize.NORMAL).build())
+                                     .map(city -> PoiBuilder.create().lat(city.lat()).lon(city.lon()).name(city.name()).fill(Color.CYAN).pointSize(PoiSize.NORMAL).build())
                                      .collect(Collectors.toList());
 
-        Location   fmo      = LocationBuilder.create().name("FMO").latitude(52.1307).longitude(7.6941).connectionPartType(ConnectionPartType.SOURCE).build();
-        Location   arn      = LocationBuilder.create().name("ARN").latitude(59.6498).longitude(17.9238).connectionPartType(ConnectionPartType.TARGET).build();
-        Location   mad      = LocationBuilder.create().name("MAD").latitude(40.4983).longitude(-3.5676).connectionPartType(ConnectionPartType.SOURCE).build();
-        Location   lis      = LocationBuilder.create().name("LIS").latitude(38.7756).longitude(-9.1354).connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation  fmo      = CLocationBuilder.create().name("FMO").latitude(52.1307).longitude(7.6941).connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation  arn      = CLocationBuilder.create().name("ARN").latitude(59.6498).longitude(17.9238).connectionPartType(ConnectionPartType.TARGET).build();
+        CLocation  mad      = CLocationBuilder.create().name("MAD").latitude(40.4983).longitude(-3.5676).connectionPartType(ConnectionPartType.SOURCE).build();
+        CLocation  lis      = CLocationBuilder.create().name("LIS").latitude(38.7756).longitude(-9.1354).connectionPartType(ConnectionPartType.SOURCE).build();
         Connection madToArn = ConnectionBuilder.create(mad, arn).arrowsVisible(true).lineWidth(2).stroke(Color.MAGENTA).build();
         Connection lisToArn = ConnectionBuilder.create(lis, arn).arrowsVisible(true).lineWidth(2).stroke(Color.YELLOW).build();
         Connection fmoToArn = ConnectionBuilder.create(fmo, arn).arrowsVisible(true).lineWidth(2).stroke(Color.CYAN).build();

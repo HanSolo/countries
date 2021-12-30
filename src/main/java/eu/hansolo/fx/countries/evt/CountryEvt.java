@@ -20,10 +20,6 @@ public class CountryEvt<T> extends ChangeEvt {
 
 
     // ******************** Constructors **************************************
-    public CountryEvt(final EvtType<? extends CountryEvt> evtType, final T data) {
-        super(evtType);
-        this.data = data;
-    }
     public CountryEvt(final Object src, final EvtType<? extends CountryEvt> evtType, final T data) {
         super(src, evtType);
         this.data = data;

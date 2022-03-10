@@ -41,9 +41,9 @@ dependencies {
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-swing:${javafxVersion}:${platform}"
-    implementation "eu.hansolo:toolbox:17.0.19"
-    implementation "eu.hansolo:toolboxfx:17.0.26"
-    implementation "eu.hansolo.fx:heatmap:17.0.7"
+    implementation "eu.hansolo:toolbox:17.0.21"
+    implementation "eu.hansolo:toolboxfx:17.0.27"
+    implementation "eu.hansolo.fx:heatmap:17.0.8"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -81,20 +81,27 @@ jar {
     }
 }
 
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
 
 // start the from gradle
 task DemoCountryPane(type: JavaExec) {
-    main = "eu.hansolo.fx.countries.LauncherDemoCountryPane"
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoCountryPane"
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task DemoRegionPane(type: JavaExec) {
-    main = "eu.hansolo.fx.countries.LauncherDemoRegionPane"
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoRegionPane"
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task DemoWorldPane(type: JavaExec) {
-    main = "eu.hansolo.fx.countries.LauncherDemoWorldPane"
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoWorldPane"
     classpath = sourceSets.main.runtimeClasspath
 }
 

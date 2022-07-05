@@ -6,6 +6,7 @@ import eu.hansolo.fx.countries.tools.ConnectionPartType;
 import eu.hansolo.fx.countries.tools.Helper;
 import eu.hansolo.fx.countries.tools.CLocation;
 import eu.hansolo.fx.countries.tools.Records.Airport;
+import eu.hansolo.fx.countries.tools.Records.Airport2;
 import eu.hansolo.toolboxfx.geom.Poi;
 import eu.hansolo.toolboxfx.geom.PoiBuilder;
 import eu.hansolo.toolboxfx.geom.PoiSize;
@@ -48,6 +49,11 @@ public class DemoWorldPane extends Application {
         Connection fmoToSin = ConnectionBuilder.create(fmo, sin).arrowsVisible(true).lineWidth(2).stroke(Color.CYAN).build();
         Connection jfkToHnd = ConnectionBuilder.create(jfk, hnd).arrowsVisible(true).lineWidth(2).stroke(Color.MAGENTA).build();
         Connection sydToSfo = ConnectionBuilder.create(syd, sfo).arrowsVisible(true).lineWidth(2).stroke(Color.YELLOW).build();
+
+        Map<String, Airport2> airports2 = Helper.getAirports2();
+        Airport2 fmo2 = airports2.get("FMO");
+        System.out.println(fmo2.name() + "   " + fmo2.iata() + "   " + fmo2.icao());
+
 
         List<Point> heatmapSpots = new ArrayList<>();
 

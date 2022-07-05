@@ -18,6 +18,7 @@ package eu.hansolo.fx.countries.tools;
 
 import eu.hansolo.fx.countries.Country;
 import eu.hansolo.fx.countries.tools.Records.Airport;
+import eu.hansolo.fx.countries.tools.Records.Airport2;
 import eu.hansolo.fx.countries.tools.Records.City;
 import eu.hansolo.toolboxfx.geom.Point;
 import javafx.animation.Interpolator;
@@ -44,10 +45,11 @@ import java.util.stream.Stream;
 
 
 public class Helper {
-    private static final List<City>           cities      = new ArrayList<>();
-    private static final List<City>           capitals    = new ArrayList<>();
-    private static final Map<String, Airport> airports    = new HashMap<>();
-    private static final Map<Country, Long>   populations = new HashMap<>();
+    private static final List<City>           cities       = new ArrayList<>();
+    private static final List<City>           capitals     = new ArrayList<>();
+    private static final Map<String, Airport>  airports    = new HashMap<>();
+    private static final Map<String, Airport2> airports2   = new HashMap<>();
+    private static final Map<Country, Long>    populations = new HashMap<>();
 
 
     public static final int clamp(final int min, final int max, final int value) {
@@ -143,6 +145,34 @@ public class Helper {
             }
         }
         return airports;
+    }
+
+    public static final Map<String, Airport2> getAirports2() {
+        // "country_code","region_name","iata","icao","airport","latitude","longitude"
+        if (airports2.isEmpty()) {
+            // size,name,iso2,iata,lat,lon
+            try(InputStream in = Helper.class.getResourceAsStream(Constants.AIRPORTS2_FILE);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                Stream<String> lines = reader.lines();
+                lines.forEach(line -> {
+                    String[]          airportParts = line.split(",");
+                    if (airportParts.length == 7) {
+                        String            name       = airportParts[4];
+                        Optional<Country> countryOpt = Country.fromIso2(airportParts[0]);
+                        String            iata       = airportParts[2];
+                        String            icao       = airportParts[3];
+                        double            lat        = Double.parseDouble(airportParts[5]);
+                        double            lon        = Double.parseDouble(airportParts[6]);
+                        System.out.println(iata + "   " + icao);
+                        if (countryOpt.isPresent()) { airports2.put(iata, new Airport2(name, lat, lon, countryOpt.get(), iata, icao)); }
+                    }
+                });
+                lines.close();
+            } catch (IOException e) {
+
+            }
+        }
+        return airports2;
     }
 
     public static final Map<Country, Long> getPopulations() {

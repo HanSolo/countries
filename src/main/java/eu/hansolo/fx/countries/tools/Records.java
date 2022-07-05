@@ -61,4 +61,23 @@ public class Records {
                                       .toString();
         }
     }
+
+    public record Airport2(String name, double lat, double lon, Country country, String iata, String icao) {
+        public Poi toPoi() { return new Poi(lat, lon, name, iata, null, PoiSize.NORMAL, Color.RED, Color.TRANSPARENT, null, null, null); }
+
+        public CLocationBuilder toLocationBuilder() { return CLocationBuilder.create().latitude(lat).longitude(lon).name(name).info(iata).country(country); }
+
+        @Override public String toString() {
+            return new StringBuilder().append("{")
+                                      .append("\"name\":\"").append(name).append("\",")
+                                      .append("\"lat\":").append(lat).append(",")
+                                      .append("\"lon\":").append(lat).append(",")
+                                      .append("\"country\":\"").append(country.getDisplayName()).append("\",")
+                                      .append("\"iso2\":\"").append(country.getIso2()).append("\",")
+                                      .append("\"icao\":").append(icao).append(",")
+                                      .append("\"iata\":").append(iata)
+                                      .append("}")
+                                      .toString();
+        }
+    }
 }

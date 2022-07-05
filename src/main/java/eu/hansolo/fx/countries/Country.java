@@ -7,6 +7,7 @@ import eu.hansolo.fx.countries.tools.CountryPath;
 import eu.hansolo.fx.countries.tools.Helper;
 import eu.hansolo.fx.countries.tools.CLocation;
 import eu.hansolo.fx.countries.tools.Records.Airport;
+import eu.hansolo.fx.countries.tools.Records.Airport2;
 import eu.hansolo.fx.countries.tools.Records.City;
 import eu.hansolo.fx.countries.tools.Resolution;
 import eu.hansolo.toolboxfx.ValueObject;
@@ -330,6 +331,7 @@ public enum Country {
 
     public List<Airport> getAirports() { return Helper.getAirports().entrySet().stream().filter(entry -> entry.getValue().country() == Country.this).map(entry -> entry.getValue()).collect(Collectors.toList()); }
 
+    public List<Airport2> getAirports2() { return Helper.getAirports2().entrySet().stream().filter(entry -> entry.getValue().country() == Country.this).map(entry -> entry.getValue()).collect(Collectors.toList()); }
     public List<CountryPath> getPaths() { return getCountryPaths().get(Country.this); }
 
     public List<CountryPath> getCopyOfPaths() { return getCopyOfCountryPaths().get(Country.this); }

@@ -59,5 +59,6 @@ public class Constants {
 
     public static final String CITIES_FILE       = "cities.txt";
     public static final String AIRPORTS_FILE     = "airports.txt";
+    public static final String AIRPORTS2_FILE    = "airports2.txt";
     public static final String POPULATION_FILE   = "population_2020.txt";
 }

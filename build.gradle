@@ -1,13 +1,13 @@
 import java.text.SimpleDateFormat
 
-
 plugins {
+    id 'idea'
     id 'java-library'
     id 'maven-publish'
     id 'signing'
     id 'com.google.osdetector'           version '1.7.3'
     id 'org.javamodularity.moduleplugin' version '1.8.12'
-    id 'org.beryx.jlink'                 version '2.25.0'
+    id 'org.beryx.jlink'                 version '2.26.0'
     id 'net.nemerosa.versioning'         version '3.0.0'
 }
 
@@ -41,8 +41,8 @@ dependencies {
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-swing:${javafxVersion}:${platform}"
     implementation "eu.hansolo:toolbox:17.0.45"
-    implementation "eu.hansolo:toolboxfx:17.0.35"
-    implementation "eu.hansolo.fx:heatmap:17.0.13"
+    implementation "eu.hansolo:toolboxfx:17.0.37"
+    implementation "eu.hansolo.fx:heatmap:17.0.15"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -117,13 +117,6 @@ task createProperties(dependsOn: processResources) {
 
 classes {
     dependsOn createProperties
-}
-
-// Fix problems with loading resources
-sourceSets {
-    main {
-        output.setResourcesDir(java.outputDir)
-    }
 }
 
 run {

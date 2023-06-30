@@ -207,79 +207,51 @@ public class CountryPaneBuilder<B extends CountryPaneBuilder<B>> {
     public final CountryPane build() {
         CountryPane countryPane = new CountryPane(country);
         for (String key : properties.keySet()) {
-            if ("prefSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                countryPane.setPrefSize(dim.getWidth(), dim.getHeight());
-            } else if ("minSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                countryPane.setMinSize(dim.getWidth(), dim.getHeight());
-            } else if ("maxSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                countryPane.setMaxSize(dim.getWidth(), dim.getHeight());
-            } else if ("prefWidth".equals(key)) {
-                countryPane.setPrefWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("prefHeight".equals(key)) {
-                countryPane.setPrefHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("minWidth".equals(key)) {
-                countryPane.setMinWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("minHeight".equals(key)) {
-                countryPane.setMinHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("maxWidth".equals(key)) {
-                countryPane.setMaxWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("maxHeight".equals(key)) {
-                countryPane.setMaxHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("scaleX".equals(key)) {
-                countryPane.setScaleX(((DoubleProperty) properties.get(key)).get());
-            } else if ("scaleY".equals(key)) {
-                countryPane.setScaleY(((DoubleProperty) properties.get(key)).get());
-            } else if ("layoutX".equals(key)) {
-                countryPane.setLayoutX(((DoubleProperty) properties.get(key)).get());
-            } else if ("layoutY".equals(key)) {
-                countryPane.setLayoutY(((DoubleProperty) properties.get(key)).get());
-            } else if ("translateX".equals(key)) {
-                countryPane.setTranslateX(((DoubleProperty) properties.get(key)).get());
-            } else if ("translateY".equals(key)) {
-                countryPane.setTranslateY(((DoubleProperty) properties.get(key)).get());
-            } else if ("padding".equals(key)) {
-                countryPane.setPadding(((ObjectProperty<Insets>) properties.get(key)).get());
-            } else if ("backgroundColor".equals(key)) {
-                countryPane.setBackground(((ObjectProperty<Paint>) properties.get(key)).get());
-            } else if ("fill".equals(key)) {
-                countryPane.setFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("stroke".equals(key)) {
-                countryPane.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("lineWidth".equals(key)) {
-                countryPane.setLineWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("poiFill".equals(key)) {
-                countryPane.setPoiFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poiStroke".equals(key)) {
-                countryPane.setPoiStroke(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poiTextFill".equals(key)) {
-                countryPane.setPoiTextFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poisVisible".equals(key)) {
-                countryPane.setPoisVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("poiTextVisible".equals(key)) {
-                countryPane.setPoiTextVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("pois".equals(key)) {
-                countryPane.addPois(((ObjectProperty<List<Poi>>) properties.get(key)).get());
-            } else if ("heatmapVisible".equals(key)) {
-                countryPane.setHeatmapVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("heatmapSpots".equals(key)) {
-                countryPane.setHeatmapSpots(((ObjectProperty<List<Point>>) properties.get(key)).get());
-            } else if ("heatmapColorMapping".equals(key)) {
-                countryPane.setHeatmapColorMapping(((ObjectProperty<Mapping>) properties.get(key)).get());
-            } else if ("heatmapSpotRadius".equals(key)) {
-                countryPane.setHeatmapSpotRadius(((DoubleProperty) properties.get(key)).get());
-            } else if ("heatmapFadeColors".equals(key)) {
-                countryPane.setHeatmapFadeColors(((BooleanProperty) properties.get(key)).get());
-            } else if ("heatmapOpacityDistribution".equals(key)) {
-                countryPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
-            } else if ("heatmapOpacity".equals(key)) {
-                countryPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
-            } else if ("connections".equals(key)) {
-                countryPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
-            } else if ("overlayVisible".equals(key)) {
-                countryPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
+            switch (key) {
+                case "prefSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    countryPane.setPrefSize(dim.getWidth(), dim.getHeight());
+                }
+                case "minSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    countryPane.setMinSize(dim.getWidth(), dim.getHeight());
+                }
+                case "maxSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    countryPane.setMaxSize(dim.getWidth(), dim.getHeight());
+                }
+                case "prefWidth"                  -> countryPane.setPrefWidth(((DoubleProperty) properties.get(key)).get());
+                case "prefHeight"                 -> countryPane.setPrefHeight(((DoubleProperty) properties.get(key)).get());
+                case "minWidth"                   -> countryPane.setMinWidth(((DoubleProperty) properties.get(key)).get());
+                case "minHeight"                  -> countryPane.setMinHeight(((DoubleProperty) properties.get(key)).get());
+                case "maxWidth"                   -> countryPane.setMaxWidth(((DoubleProperty) properties.get(key)).get());
+                case "maxHeight"                  -> countryPane.setMaxHeight(((DoubleProperty) properties.get(key)).get());
+                case "scaleX"                     -> countryPane.setScaleX(((DoubleProperty) properties.get(key)).get());
+                case "scaleY"                     -> countryPane.setScaleY(((DoubleProperty) properties.get(key)).get());
+                case "layoutX"                    -> countryPane.setLayoutX(((DoubleProperty) properties.get(key)).get());
+                case "layoutY"                    -> countryPane.setLayoutY(((DoubleProperty) properties.get(key)).get());
+                case "translateX"                 -> countryPane.setTranslateX(((DoubleProperty) properties.get(key)).get());
+                case "translateY"                 -> countryPane.setTranslateY(((DoubleProperty) properties.get(key)).get());
+                case "padding"                    -> countryPane.setPadding(((ObjectProperty<Insets>) properties.get(key)).get());
+                case "backgroundColor"            -> countryPane.setBackground(((ObjectProperty<Paint>) properties.get(key)).get());
+                case "fill"                       -> countryPane.setFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "stroke"                     -> countryPane.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                case "lineWidth"                  -> countryPane.setLineWidth(((DoubleProperty) properties.get(key)).get());
+                case "poiFill"                    -> countryPane.setPoiFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poiStroke"                  -> countryPane.setPoiStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poiTextFill"                -> countryPane.setPoiTextFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poisVisible"                -> countryPane.setPoisVisible(((BooleanProperty) properties.get(key)).get());
+                case "poiTextVisible"             -> countryPane.setPoiTextVisible(((BooleanProperty) properties.get(key)).get());
+                case "pois"                       -> countryPane.addPois(((ObjectProperty<List<Poi>>) properties.get(key)).get());
+                case "heatmapVisible"             -> countryPane.setHeatmapVisible(((BooleanProperty) properties.get(key)).get());
+                case "heatmapSpots"               -> countryPane.setHeatmapSpots(((ObjectProperty<List<Point>>) properties.get(key)).get());
+                case "heatmapColorMapping"        -> countryPane.setHeatmapColorMapping(((ObjectProperty<Mapping>) properties.get(key)).get());
+                case "heatmapSpotRadius"          -> countryPane.setHeatmapSpotRadius(((DoubleProperty) properties.get(key)).get());
+                case "heatmapFadeColors"          -> countryPane.setHeatmapFadeColors(((BooleanProperty) properties.get(key)).get());
+                case "heatmapOpacityDistribution" -> countryPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
+                case "heatmapOpacity"             -> countryPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
+                case "connections"                -> countryPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
+                case "overlayVisible"             -> countryPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
             }
         }
         return countryPane;

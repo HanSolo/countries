@@ -250,97 +250,60 @@ public class WorldPaneBuilder<B extends WorldPaneBuilder<B>> {
     public final WorldPane build() {
         WorldPane worldPane = new WorldPane();
         for (String key : properties.keySet()) {
-            if ("prefSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                worldPane.setPrefSize(dim.getWidth(), dim.getHeight());
-            } else if ("minSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                worldPane.setMinSize(dim.getWidth(), dim.getHeight());
-            } else if ("maxSize".equals(key)) {
-                Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                worldPane.setMaxSize(dim.getWidth(), dim.getHeight());
-            } else if ("prefWidth".equals(key)) {
-                worldPane.setPrefWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("prefHeight".equals(key)) {
-                worldPane.setPrefHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("minWidth".equals(key)) {
-                worldPane.setMinWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("minHeight".equals(key)) {
-                worldPane.setMinHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("maxWidth".equals(key)) {
-                worldPane.setMaxWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("maxHeight".equals(key)) {
-                worldPane.setMaxHeight(((DoubleProperty) properties.get(key)).get());
-            } else if ("scaleX".equals(key)) {
-                worldPane.setScaleX(((DoubleProperty) properties.get(key)).get());
-            } else if ("scaleY".equals(key)) {
-                worldPane.setScaleY(((DoubleProperty) properties.get(key)).get());
-            } else if ("layoutX".equals(key)) {
-                worldPane.setLayoutX(((DoubleProperty) properties.get(key)).get());
-            } else if ("layoutY".equals(key)) {
-                worldPane.setLayoutY(((DoubleProperty) properties.get(key)).get());
-            } else if ("translateX".equals(key)) {
-                worldPane.setTranslateX(((DoubleProperty) properties.get(key)).get());
-            } else if ("translateY".equals(key)) {
-                worldPane.setTranslateY(((DoubleProperty) properties.get(key)).get());
-            } else if ("padding".equals(key)) {
-                worldPane.setPadding(((ObjectProperty<Insets>) properties.get(key)).get());
-            } else if ("backgroundColor".equals(key)) {
-                worldPane.setBackground(((ObjectProperty<Paint>) properties.get(key)).get());
-            } else if ("fill".equals(key)) {
-                worldPane.setFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("stroke".equals(key)) {
-                worldPane.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("lineWidth".equals(key)) {
-                worldPane.setLineWidth(((DoubleProperty) properties.get(key)).get());
-            } else if ("poiFill".equals(key)) {
-                worldPane.setPoiFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poiStroke".equals(key)) {
-                worldPane.setPoiStroke(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poiTextFill".equals(key)) {
-                worldPane.setPoiTextFill(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("poisVisible".equals(key)) {
-                worldPane.setPoisVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("poiTextVisible".equals(key)) {
-                worldPane.setPoiTextVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("pois".equals(key)) {
-                worldPane.addPois(((ObjectProperty<List<Poi>>) properties.get(key)).get());
-            } else if ("heatmapVisible".equals(key)) {
-                worldPane.setHeatmapVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("heatmapSpots".equals(key)) {
-                worldPane.setHeatmapSpots(((ObjectProperty<List<Point>>) properties.get(key)).get());
-            } else if ("heatmapColorMapping".equals(key)) {
-                worldPane.setHeatmapColorMapping(((ObjectProperty<Mapping>) properties.get(key)).get());
-            } else if ("heatmapSpotRadius".equals(key)) {
-                worldPane.setHeatmapSpotRadius(((DoubleProperty) properties.get(key)).get());
-            } else if ("heatmapFadeColors".equals(key)) {
-                worldPane.setHeatmapFadeColors(((BooleanProperty) properties.get(key)).get());
-            } else if ("heatmapOpacityDistribution".equals(key)) {
-                worldPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
-            } else if ("heatmapOpacity".equals(key)) {
-                worldPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
-            } else if ("connections".equals(key)) {
-                worldPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
-            } else if ("overlayVisible".equals(key)) {
-                worldPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
-            } else if ("hoverEnabled".equals(key)) {
-                worldPane.setHoverEnabled(((BooleanProperty) properties.get(key)).get());
-            } else if ("selectionEnabled".equals(key)) {
-                worldPane.setSelectionEnabled(((BooleanProperty) properties.get(key)).get());
-            } else if ("hoverColor".equals(key)) {
-                worldPane.setHoverColor(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("pressedColor".equals(key)) {
-                worldPane.setPressedColor(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("selectedColor".equals(key)) {
-                worldPane.setSelectedColor(((ObjectProperty<Color>) properties.get(key)).get());
-            } else if ("mouseEnterHandler".equals(key)) {
-                worldPane.setMouseEnterHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-            } else if ("mousePressHandler".equals(key)) {
-                worldPane.setMousePressHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-            } else if ("mouseReleaseHandler".equals(key)) {
-                worldPane.setMouseReleaseHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-            } else if ("mouseExitHandler".equals(key)) {
-                worldPane.setMouseExitHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
+            switch (key) {
+                case "prefSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    worldPane.setPrefSize(dim.getWidth(), dim.getHeight());
+                }
+                case "minSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    worldPane.setMinSize(dim.getWidth(), dim.getHeight());
+                }
+                case "maxSize" -> {
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
+                    worldPane.setMaxSize(dim.getWidth(), dim.getHeight());
+                }
+                case "prefWidth"                  -> worldPane.setPrefWidth(((DoubleProperty) properties.get(key)).get());
+                case "prefHeight"                 -> worldPane.setPrefHeight(((DoubleProperty) properties.get(key)).get());
+                case "minWidth"                   -> worldPane.setMinWidth(((DoubleProperty) properties.get(key)).get());
+                case "minHeight"                  -> worldPane.setMinHeight(((DoubleProperty) properties.get(key)).get());
+                case "maxWidth"                   -> worldPane.setMaxWidth(((DoubleProperty) properties.get(key)).get());
+                case "maxHeight"                  -> worldPane.setMaxHeight(((DoubleProperty) properties.get(key)).get());
+                case "scaleX"                     -> worldPane.setScaleX(((DoubleProperty) properties.get(key)).get());
+                case "scaleY"                     -> worldPane.setScaleY(((DoubleProperty) properties.get(key)).get());
+                case "layoutX"                    -> worldPane.setLayoutX(((DoubleProperty) properties.get(key)).get());
+                case "layoutY"                    -> worldPane.setLayoutY(((DoubleProperty) properties.get(key)).get());
+                case "translateX"                 -> worldPane.setTranslateX(((DoubleProperty) properties.get(key)).get());
+                case "translateY"                 -> worldPane.setTranslateY(((DoubleProperty) properties.get(key)).get());
+                case "padding"                    -> worldPane.setPadding(((ObjectProperty<Insets>) properties.get(key)).get());
+                case "backgroundColor"            -> worldPane.setBackground(((ObjectProperty<Paint>) properties.get(key)).get());
+                case "fill"                       -> worldPane.setFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "stroke"                     -> worldPane.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                case "lineWidth"                  -> worldPane.setLineWidth(((DoubleProperty) properties.get(key)).get());
+                case "poiFill"                    -> worldPane.setPoiFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poiStroke"                  -> worldPane.setPoiStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poiTextFill"                -> worldPane.setPoiTextFill(((ObjectProperty<Color>) properties.get(key)).get());
+                case "poisVisible"                -> worldPane.setPoisVisible(((BooleanProperty) properties.get(key)).get());
+                case "poiTextVisible"             -> worldPane.setPoiTextVisible(((BooleanProperty) properties.get(key)).get());
+                case "pois"                       -> worldPane.addPois(((ObjectProperty<List<Poi>>) properties.get(key)).get());
+                case "heatmapVisible"             -> worldPane.setHeatmapVisible(((BooleanProperty) properties.get(key)).get());
+                case "heatmapSpots"               -> worldPane.setHeatmapSpots(((ObjectProperty<List<Point>>) properties.get(key)).get());
+                case "heatmapColorMapping"        -> worldPane.setHeatmapColorMapping(((ObjectProperty<Mapping>) properties.get(key)).get());
+                case "heatmapSpotRadius"          -> worldPane.setHeatmapSpotRadius(((DoubleProperty) properties.get(key)).get());
+                case "heatmapFadeColors"          -> worldPane.setHeatmapFadeColors(((BooleanProperty) properties.get(key)).get());
+                case "heatmapOpacityDistribution" -> worldPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
+                case "heatmapOpacity"             -> worldPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
+                case "connections"                -> worldPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
+                case "overlayVisible"             -> worldPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
+                case "hoverEnabled"               -> worldPane.setHoverEnabled(((BooleanProperty) properties.get(key)).get());
+                case "selectionEnabled"           -> worldPane.setSelectionEnabled(((BooleanProperty) properties.get(key)).get());
+                case "hoverColor"                 -> worldPane.setHoverColor(((ObjectProperty<Color>) properties.get(key)).get());
+                case "pressedColor"               -> worldPane.setPressedColor(((ObjectProperty<Color>) properties.get(key)).get());
+                case "selectedColor"              -> worldPane.setSelectedColor(((ObjectProperty<Color>) properties.get(key)).get());
+                case "mouseEnterHandler"          -> worldPane.setMouseEnterHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
+                case "mousePressHandler"          -> worldPane.setMousePressHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
+                case "mouseReleaseHandler"        -> worldPane.setMouseReleaseHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
+                case "mouseExitHandler"           -> worldPane.setMouseExitHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
             }
         }
         return worldPane;

@@ -5,8 +5,8 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id 'com.google.osdetector'           version '1.7.0'
-    id 'org.javamodularity.moduleplugin' version '1.8.11'
+    id 'com.google.osdetector'           version '1.7.3'
+    id 'org.javamodularity.moduleplugin' version '1.8.12'
     id 'org.beryx.jlink'                 version '2.25.0'
     id 'net.nemerosa.versioning'         version '3.0.0'
 }
@@ -36,14 +36,13 @@ repositories {
 }
 
 dependencies {
-    //implementation 'com.google.gradle:osdetector-gradle-plugin:1.7.0'
     implementation "org.openjfx:javafx-base:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-swing:${javafxVersion}:${platform}"
-    implementation "eu.hansolo:toolbox:17.0.26"
-    implementation "eu.hansolo:toolboxfx:17.0.29"
-    implementation "eu.hansolo.fx:heatmap:17.0.12"
+    implementation "eu.hansolo:toolbox:17.0.45"
+    implementation "eu.hansolo:toolboxfx:17.0.35"
+    implementation "eu.hansolo.fx:heatmap:17.0.13"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'

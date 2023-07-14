@@ -45,8 +45,8 @@ import java.util.stream.Stream;
 
 
 public class Helper {
-    private static final List<City>           cities       = new ArrayList<>();
-    private static final List<City>           capitals     = new ArrayList<>();
+    private static final List<City>            cities       = new ArrayList<>();
+    private static final List<City>            capitals     = new ArrayList<>();
     private static final Map<String, Airport>  airports    = new HashMap<>();
     private static final Map<String, Airport2> airports2   = new HashMap<>();
     private static final Map<Country, Long>    populations = new HashMap<>();

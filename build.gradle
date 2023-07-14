@@ -40,9 +40,9 @@ dependencies {
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-swing:${javafxVersion}:${platform}"
-    implementation "eu.hansolo:toolbox:17.0.45"
-    implementation "eu.hansolo:toolboxfx:17.0.37"
-    implementation "eu.hansolo.fx:heatmap:17.0.15"
+    implementation "eu.hansolo:toolbox:17.0.47"
+    implementation "eu.hansolo:toolboxfx:17.0.41"
+    implementation "eu.hansolo.fx:heatmap:17.0.21"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'

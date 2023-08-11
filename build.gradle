@@ -44,15 +44,15 @@ dependencies {
     implementation "eu.hansolo:toolboxfx:17.0.43"
     implementation "eu.hansolo.fx:heatmap:17.0.23"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
 
 
 jar {
     from {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations.runtimeClasspath.collect {  it.isDirectory() ? it : zipTree(it)  }
+        //duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        //configurations.runtimeClasspath.collect {  it.isDirectory() ? it : zipTree(it)  }
     } {
         exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
@@ -73,7 +73,7 @@ jar {
                 'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://spdx.org/licenses/Apache-2.0.html',
                 'Bundle-Description'    : description,
                 'Bundle-SymbolicName'   : 'eu.hansolo.fx.countries',
-                'Export-Package'        : 'eu.hansolo.fx.countries, eu.hansolo.fx.countries.evt, eu.hansolo.fx.countries.flag, eu.hansolo.fx.countries.font, eu.hansolo.fx.tools',
+                'Export-Package'        : 'eu.hansolo.fx.countries, eu.hansolo.fx.countries.evt, eu.hansolo.fx.countries.flag, eu.hansolo.fx.tools',
                 'Class-Path'            : "${project.name}-${project.version}.jar",
                 'Main-Class'            : 'eu.hansolo.fx.countries.Launcher'
         )
@@ -104,19 +104,11 @@ task DemoWorldPane(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-// create properties file including the version
-task createProperties(dependsOn: processResources) {
-    doLast {
-        new File("$buildDir//classes/java/main/eu/hansolo/fx/countries/version.properties").withWriter { w ->
-            Properties p = new Properties()
-            p['version'] = project.version.toString()
-            p.store w, null
-        }
+processResources {
+    def props = ["version": project.version.toString()]
+    filesMatching("**/eu/hansolo/fx/countries/version.properties") {
+        expand props
     }
-}
-
-classes {
-    dependsOn createProperties
 }
 
 run {

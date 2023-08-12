@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 description   = 'Countries is a JavaFX library containing controls and info for countries and cities'
-mainClassName = "$moduleName/eu.hansolo.fx.countries.Launcher"
+mainClassName = "$moduleName/eu.hansolo.fx.countries.Launcher" // Deprecated: Old Gradle 6.4 Syntax
 
 Date buildTimeAndDate = new Date()
 ext {
@@ -48,6 +48,15 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
 
+application {
+    mainClass = "eu.hansolo.fx.countries.Launcher"
+    mainModule = moduleName
+}
+
+java {
+    // Set to false per https://github.com/java9-modularity/gradle-modules-plugin
+    modularity.inferModulePath.set(false)
+}
 
 jar {
     from {

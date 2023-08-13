@@ -84,7 +84,7 @@ jar {
                 'Bundle-SymbolicName'   : 'eu.hansolo.fx.countries',
                 'Export-Package'        : 'eu.hansolo.fx.countries, eu.hansolo.fx.countries.evt, eu.hansolo.fx.countries.flag, eu.hansolo.fx.tools',
                 'Class-Path'            : "${project.name}-${project.version}.jar",
-                'Main-Class'            : 'eu.hansolo.fx.countries.Launcher'
+                'Main-Class'            : application.mainClass
         )
     }
 }

@@ -51,7 +51,7 @@ dependencies {
 }
 
 application {
-    mainClass = "eu.hansolo.fx.countries.Launcher"
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoWorldPane"
     mainModule = moduleName
 }
 

@@ -1,3 +1,6 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 import java.text.SimpleDateFormat
 
 plugins {
@@ -15,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 description   = 'Countries is a JavaFX library containing controls and info for countries and cities'
-mainClassName = "$moduleName/eu.hansolo.fx.countries.Launcher"
+mainClassName = "$moduleName/eu.hansolo.fx.countries.Launcher" // Deprecated: Old Gradle 6.4 Syntax
 
 Date buildTimeAndDate = new Date()
 ext {
@@ -48,6 +51,15 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
 
+application {
+    mainClass = "eu.hansolo.fx.countries.Launcher"
+    mainModule = moduleName
+}
+
+java {
+    // Set to false per https://github.com/java9-modularity/gradle-modules-plugin
+    modularity.inferModulePath.set(false)
+}
 
 jar {
     from {
@@ -75,7 +87,7 @@ jar {
                 'Bundle-SymbolicName'   : 'eu.hansolo.fx.countries',
                 'Export-Package'        : 'eu.hansolo.fx.countries, eu.hansolo.fx.countries.evt, eu.hansolo.fx.countries.flag, eu.hansolo.fx.tools',
                 'Class-Path'            : "${project.name}-${project.version}.jar",
-                'Main-Class'            : 'eu.hansolo.fx.countries.Launcher'
+                'Main-Class'            : application.mainClass
         )
     }
 }
@@ -147,6 +159,24 @@ signing {
 
     sign configurations.archives
     sign publishing.publications
+}
+
+// Remove 'thirdPartyCompatibility' from JavaFX runtimeElements variant
+// Otherwise it locks Gradle Module Metadata (GMM) to the publishing OS
+tasks.withType(GenerateModuleMetadata).configureEach {
+    doLast { _ ->
+        def gmmFile = it.outputFile.get().asFile
+        def inJson = new JsonSlurper().parseText(gmmFile.text)
+        def filteredVariant = inJson.variants.findAll { it.name == configurations.runtimeElements.name }
+        // remove "thirdPartyCompatibility" from GMM
+        filteredVariant.dependencies.first().each {
+            if (it.group == 'org.openjfx') {
+                it.remove('thirdPartyCompatibility')
+            }
+        }
+        def outJson = JsonOutput.toJson(inJson)
+        gmmFile.write(JsonOutput.prettyPrint(outJson))
+    }
 }
 
 publishing {

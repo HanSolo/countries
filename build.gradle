@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    api "eu.hansolo.fx:heatmap:17.0.25"
+    api "eu.hansolo.fx:heatmap:17.0.27"
     implementation "org.openjfx:javafx-base:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"

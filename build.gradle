@@ -39,13 +39,11 @@ repositories {
 }
 
 dependencies {
+    api "eu.hansolo.fx:heatmap:17.0.25"
     implementation "org.openjfx:javafx-base:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-swing:${javafxVersion}:${platform}"
-    implementation "eu.hansolo:toolbox:17.0.55"
-    implementation "eu.hansolo:toolboxfx:17.0.45"
-    implementation "eu.hansolo.fx:heatmap:17.0.25"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'

@@ -1,5 +1,7 @@
 ## Countries
 
+[![JFXCentral](https://img.shields.io/badge/Find_me_on-JFXCentral-blue?logo=googlechrome&logoColor=white)](https://www.jfx-central.com/libraries/countries)
+
 Countries is a JavaFX library which contains information about countries like their shape, gps coordinates, cities and airports.
 
 There are three controls you can use

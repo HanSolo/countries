@@ -11,7 +11,7 @@ plugins {
     id 'com.google.osdetector'           version '1.7.3'
     id 'org.javamodularity.moduleplugin' version '1.8.15'
     id 'org.beryx.jlink'                 version '3.0.1'
-    id 'net.nemerosa.versioning'         version '3.1.0'
+    id 'net.nemerosa.versioning'         version '3.0.0'
 }
 
 apply plugin: 'maven-publish'
@@ -89,10 +89,47 @@ jar {
     }
 }
 
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+// start the from gradle
+task DemoCountryPane(type: JavaExec) {
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoCountryPane"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task DemoRegionPane(type: JavaExec) {
+    mainClass = "eu.hansolo.fx.countries.LauncherDemoRegionPane"
+    classpath = sourceSets.main.runtimeClasspath
+}
 
 task DemoWorldPane(type: JavaExec) {
     mainClass = "eu.hansolo.fx.countries.LauncherDemoWorldPane"
     classpath = sourceSets.main.runtimeClasspath
+}
+
+processResources {
+    def props = ["version": project.version.toString()]
+    filesMatching("**/eu/hansolo/fx/countries/version.properties") {
+        expand props
+    }
+}
+
+run {
+    def mainClassName = moduleName + "/" + application.mainClass.get()
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--module', mainClassName
+        ]
+        classpath = files()
+    }
 }
 
 // create one jar for the javadoc

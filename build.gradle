@@ -9,9 +9,9 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'com.google.osdetector'           version '1.7.3'
-    id 'org.javamodularity.moduleplugin' version '1.8.12'
+    id 'org.javamodularity.moduleplugin' version '1.8.15'
     id 'org.beryx.jlink'                 version '3.0.1'
-    id 'net.nemerosa.versioning'         version '3.0.0'
+    id 'net.nemerosa.versioning'         version '3.1.0'
 }
 
 apply plugin: 'maven-publish'
@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    api "eu.hansolo.fx:heatmap:21.0.3"
+    api "eu.hansolo.fx:heatmap:21.0.5"
     implementation "org.openjfx:javafx-base:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-graphics:${javafxVersion}:${platform}"
     implementation "org.openjfx:javafx-controls:${javafxVersion}:${platform}"
@@ -89,47 +89,10 @@ jar {
     }
 }
 
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
-        }
-    }
-}
-
-// start the from gradle
-task DemoCountryPane(type: JavaExec) {
-    mainClass = "eu.hansolo.fx.countries.LauncherDemoCountryPane"
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task DemoRegionPane(type: JavaExec) {
-    mainClass = "eu.hansolo.fx.countries.LauncherDemoRegionPane"
-    classpath = sourceSets.main.runtimeClasspath
-}
 
 task DemoWorldPane(type: JavaExec) {
     mainClass = "eu.hansolo.fx.countries.LauncherDemoWorldPane"
     classpath = sourceSets.main.runtimeClasspath
-}
-
-processResources {
-    def props = ["version": project.version.toString()]
-    filesMatching("**/eu/hansolo/fx/countries/version.properties") {
-        expand props
-    }
-}
-
-run {
-    def mainClassName = moduleName + "/" + application.mainClass.get()
-    inputs.property("moduleName", moduleName)
-    doFirst {
-        jvmArgs = [
-                '--module-path', classpath.asPath,
-                '--module', mainClassName
-        ]
-        classpath = files()
-    }
 }
 
 // create one jar for the javadoc
@@ -227,8 +190,8 @@ publishing {
             name = "OSSRH"
             url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
             credentials {
-                username = null == ciOssrhUsername ? ossrhUsername : ciOssrhUsername
-                password = null == ciOssrhPassword ? ossrhPassword : ciOssrhPassword
+                username = null == ciOssrhUsername ? ossrhToken         : ciOssrhUsername
+                password = null == ciOssrhPassword ? ossrhTokenPassword : ciOssrhPassword
             }
         }
         maven {

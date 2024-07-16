@@ -253,64 +253,64 @@ public class RegionPaneBuilder<B extends RegionPaneBuilder<B>> {
 
 
     public final RegionPane build() {
-        RegionPane regionPane = new RegionPane(region);
-        for (String key : properties.keySet()) {
+        RegionPane control = new RegionPane(region);
+        properties.forEach((key, property) -> {
             switch (key) {
                 case "prefSize" -> {
-                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                    regionPane.setPrefSize(dim.getWidth(), dim.getHeight());
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) property).get();
+                    control.setPrefSize(dim.getWidth(), dim.getHeight());
                 }
                 case "minSize" -> {
-                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                    regionPane.setMinSize(dim.getWidth(), dim.getHeight());
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) property).get();
+                    control.setMinSize(dim.getWidth(), dim.getHeight());
                 }
                 case "maxSize" -> {
-                    Dimension2D dim = ((ObjectProperty<Dimension2D>) properties.get(key)).get();
-                    regionPane.setMaxSize(dim.getWidth(), dim.getHeight());
+                    Dimension2D dim = ((ObjectProperty<Dimension2D>) property).get();
+                    control.setMaxSize(dim.getWidth(), dim.getHeight());
                 }
-                case "prefWidth"                  -> regionPane.setPrefWidth(((DoubleProperty) properties.get(key)).get());
-                case "prefHeight"                 -> regionPane.setPrefHeight(((DoubleProperty) properties.get(key)).get());
-                case "minWidth"                   -> regionPane.setMinWidth(((DoubleProperty) properties.get(key)).get());
-                case "minHeight"                  -> regionPane.setMinHeight(((DoubleProperty) properties.get(key)).get());
-                case "maxWidth"                   -> regionPane.setMaxWidth(((DoubleProperty) properties.get(key)).get());
-                case "maxHeight"                  -> regionPane.setMaxHeight(((DoubleProperty) properties.get(key)).get());
-                case "scaleX"                     -> regionPane.setScaleX(((DoubleProperty) properties.get(key)).get());
-                case "scaleY"                     -> regionPane.setScaleY(((DoubleProperty) properties.get(key)).get());
-                case "layoutX"                    -> regionPane.setLayoutX(((DoubleProperty) properties.get(key)).get());
-                case "layoutY"                    -> regionPane.setLayoutY(((DoubleProperty) properties.get(key)).get());
-                case "translateX"                 -> regionPane.setTranslateX(((DoubleProperty) properties.get(key)).get());
-                case "translateY"                 -> regionPane.setTranslateY(((DoubleProperty) properties.get(key)).get());
-                case "padding"                    -> regionPane.setPadding(((ObjectProperty<Insets>) properties.get(key)).get());
-                case "backgroundColor"            -> regionPane.setBackground(((ObjectProperty<Paint>) properties.get(key)).get());
-                case "fill"                       -> regionPane.setFill(((ObjectProperty<Color>) properties.get(key)).get());
-                case "stroke"                     -> regionPane.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
-                case "lineWidth"                  -> regionPane.setLineWidth(((DoubleProperty) properties.get(key)).get());
-                case "poiFill"                    -> regionPane.setPoiFill(((ObjectProperty<Color>) properties.get(key)).get());
-                case "poiStroke"                  -> regionPane.setPoiStroke(((ObjectProperty<Color>) properties.get(key)).get());
-                case "poiTextFill"                -> regionPane.setPoiTextFill(((ObjectProperty<Color>) properties.get(key)).get());
-                case "poisVisible"                -> regionPane.setPoisVisible(((BooleanProperty) properties.get(key)).get());
-                case "poiTextVisible"             -> regionPane.setPoiTextVisible(((BooleanProperty) properties.get(key)).get());
-                case "pois"                       -> regionPane.addPois(((ObjectProperty<List<Poi>>) properties.get(key)).get());
-                case "heatmapVisible"             -> regionPane.setHeatmapVisible(((BooleanProperty) properties.get(key)).get());
-                case "heatmapSpots"               -> regionPane.setHeatmapSpots(((ObjectProperty<List<Point>>) properties.get(key)).get());
-                case "heatmapColorMapping"        -> regionPane.setHeatmapColorMapping(((ObjectProperty<Mapping>) properties.get(key)).get());
-                case "heatmapSpotRadius"          -> regionPane.setHeatmapSpotRadius(((DoubleProperty) properties.get(key)).get());
-                case "heatmapFadeColors"          -> regionPane.setHeatmapFadeColors(((BooleanProperty) properties.get(key)).get());
-                case "heatmapOpacityDistribution" -> regionPane.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) properties.get(key)).get());
-                case "heatmapOpacity"             -> regionPane.setHeatmapOpacity(((DoubleProperty) properties.get(key)).get());
-                case "connections"                -> regionPane.setConnections(((ObjectProperty<List<Connection>>) properties.get(key)).get());
-                case "overlayVisible"             -> regionPane.setOverlayVisible(((BooleanProperty) properties.get(key)).get());
-                case "hoverEnabled"               -> regionPane.setHoverEnabled(((BooleanProperty) properties.get(key)).get());
-                case "selectionEnabled"           -> regionPane.setSelectionEnabled(((BooleanProperty) properties.get(key)).get());
-                case "hoverColor"                 -> regionPane.setHoverColor(((ObjectProperty<Color>) properties.get(key)).get());
-                case "pressedColor"               -> regionPane.setPressedColor(((ObjectProperty<Color>) properties.get(key)).get());
-                case "selectedColor"              -> regionPane.setSelectedColor(((ObjectProperty<Color>) properties.get(key)).get());
-                case "mouseEnterHandler"          -> regionPane.setMouseEnterHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-                case "mousePressHandler"          -> regionPane.setMousePressHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-                case "mouseReleaseHandler"        -> regionPane.setMouseReleaseHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
-                case "mouseExitHandler"           -> regionPane.setMouseExitHandler(((ObjectProperty<EventHandler<MouseEvent>>) properties.get(key)).get());
+                case "prefWidth"                  -> control.setPrefWidth(((DoubleProperty) property).get());
+                case "prefHeight"                 -> control.setPrefHeight(((DoubleProperty) property).get());
+                case "minWidth"                   -> control.setMinWidth(((DoubleProperty) property).get());
+                case "minHeight"                  -> control.setMinHeight(((DoubleProperty) property).get());
+                case "maxWidth"                   -> control.setMaxWidth(((DoubleProperty) property).get());
+                case "maxHeight"                  -> control.setMaxHeight(((DoubleProperty) property).get());
+                case "scaleX"                     -> control.setScaleX(((DoubleProperty) property).get());
+                case "scaleY"                     -> control.setScaleY(((DoubleProperty) property).get());
+                case "layoutX"                    -> control.setLayoutX(((DoubleProperty) property).get());
+                case "layoutY"                    -> control.setLayoutY(((DoubleProperty) property).get());
+                case "translateX"                 -> control.setTranslateX(((DoubleProperty) property).get());
+                case "translateY"                 -> control.setTranslateY(((DoubleProperty) property).get());
+                case "padding"                    -> control.setPadding(((ObjectProperty<Insets>) property).get());
+                case "backgroundColor"            -> control.setBackground(((ObjectProperty<Paint>) property).get());
+                case "fill"                       -> control.setFill(((ObjectProperty<Color>) property).get());
+                case "stroke"                     -> control.setStroke(((ObjectProperty<Color>) property).get());
+                case "lineWidth"                  -> control.setLineWidth(((DoubleProperty) property).get());
+                case "poiFill"                    -> control.setPoiFill(((ObjectProperty<Color>) property).get());
+                case "poiStroke"                  -> control.setPoiStroke(((ObjectProperty<Color>) property).get());
+                case "poiTextFill"                -> control.setPoiTextFill(((ObjectProperty<Color>) property).get());
+                case "poisVisible"                -> control.setPoisVisible(((BooleanProperty) property).get());
+                case "poiTextVisible"             -> control.setPoiTextVisible(((BooleanProperty) property).get());
+                case "pois"                       -> control.addPois(((ObjectProperty<List<Poi>>) property).get());
+                case "heatmapVisible"             -> control.setHeatmapVisible(((BooleanProperty) property).get());
+                case "heatmapSpots"               -> control.setHeatmapSpots(((ObjectProperty<List<Point>>) property).get());
+                case "heatmapColorMapping"        -> control.setHeatmapColorMapping(((ObjectProperty<Mapping>) property).get());
+                case "heatmapSpotRadius"          -> control.setHeatmapSpotRadius(((DoubleProperty) property).get());
+                case "heatmapFadeColors"          -> control.setHeatmapFadeColors(((BooleanProperty) property).get());
+                case "heatmapOpacityDistribution" -> control.setHeatmapOpacityDistribution(((ObjectProperty<OpacityDistribution>) property).get());
+                case "heatmapOpacity"             -> control.setHeatmapOpacity(((DoubleProperty) property).get());
+                case "connections"                -> control.setConnections(((ObjectProperty<List<Connection>>) property).get());
+                case "overlayVisible"             -> control.setOverlayVisible(((BooleanProperty) property).get());
+                case "hoverEnabled"               -> control.setHoverEnabled(((BooleanProperty) property).get());
+                case "selectionEnabled"           -> control.setSelectionEnabled(((BooleanProperty) property).get());
+                case "hoverColor"                 -> control.setHoverColor(((ObjectProperty<Color>) property).get());
+                case "pressedColor"               -> control.setPressedColor(((ObjectProperty<Color>) property).get());
+                case "selectedColor"              -> control.setSelectedColor(((ObjectProperty<Color>) property).get());
+                case "mouseEnterHandler"          -> control.setMouseEnterHandler(((ObjectProperty<EventHandler<MouseEvent>>) property).get());
+                case "mousePressHandler"          -> control.setMousePressHandler(((ObjectProperty<EventHandler<MouseEvent>>) property).get());
+                case "mouseReleaseHandler"        -> control.setMouseReleaseHandler(((ObjectProperty<EventHandler<MouseEvent>>) property).get());
+                case "mouseExitHandler"           -> control.setMouseExitHandler(((ObjectProperty<EventHandler<MouseEvent>>) property).get());
             }
-        }
-        return regionPane;
+        });
+        return control;
     }
 }

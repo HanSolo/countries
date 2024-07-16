@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 
 
 public class DemoWorldPane extends Application {
-    public static final String      VERSION = PropertyManager.INSTANCE.getVersionNumber();
     private             WorldPane   worldPane;
 
 
@@ -87,7 +86,7 @@ public class DemoWorldPane extends Application {
 
         Scene scene = new Scene(pane);
 
-        stage.setTitle("WorldPane Version: " + VERSION);
+        stage.setTitle("WorldPane:");
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();

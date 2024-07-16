@@ -305,17 +305,17 @@ public enum Country {
 
     public String getIso2() { return name(); }
 
-    public ValueObject getValueObject() { return valueObject; }
-    public void setValueObject(final ValueObject valueObject) { this.valueObject = valueObject; }
+    @Deprecated public ValueObject getValueObject() { return valueObject; }
+    @Deprecated public void setValueObject(final ValueObject valueObject) { this.valueObject = valueObject; }
 
-    public double getValue() { return value; }
-    public void setValue(final double value) { this.value = value; }
+    @Deprecated public double getValue() { return value; }
+    @Deprecated public void setValue(final double value) { this.value = value; }
 
-    public Color getFill() { return fill; }
-    public void setFill(final Color fill) { this.fill = fill; }
+    @Deprecated public Color getFill() { return fill; }
+    @Deprecated public void setFill(final Color fill) { this.fill = fill; }
 
-    public Color getStroke() { return stroke; }
-    public void setStroke(final Color stroke) { this.stroke = stroke; }
+    @Deprecated public Color getStroke() { return stroke; }
+    @Deprecated public void setStroke(final Color stroke) { this.stroke = stroke; }
 
     public String getDisplayName() { return displayName; }
 

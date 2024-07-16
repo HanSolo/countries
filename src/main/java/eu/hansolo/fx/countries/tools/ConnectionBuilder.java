@@ -86,30 +86,30 @@ public class ConnectionBuilder<B extends ConnectionBuilder<B>> {
 
 
     public final Connection build() {
-        Connection connection = new Connection(sourceLocation, targetLocation);
+        Connection control = new Connection(sourceLocation, targetLocation);
         properties.forEach((key, property) -> {
             if ("name".equals(key)) {
-                connection.setName(((StringProperty) properties.get(key)).get());
+                control.setName(((StringProperty) property).get());
             } else if ("value".equals(key)) {
-                connection.setValue(((DoubleProperty) properties.get(key)).get());
+                control.setValue(((DoubleProperty) property).get());
             } else if ("stroke".equals(key)) {
-                connection.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setStroke(((ObjectProperty<Color>) property).get());
             } else if ("sourceColor".equals(key)) {
-                connection.setSourceColor(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setSourceColor(((ObjectProperty<Color>) property).get());
             } else if ("targetColor".equals(key)) {
-                connection.setTargetColor(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setTargetColor(((ObjectProperty<Color>) property).get());
             } else if ("gradientFill".equals(key)) {
-                connection.setGradientFill(((BooleanProperty) properties.get(key)).get());
+                control.setGradientFill(((BooleanProperty) property).get());
             } else if ("selectedStroke".equals(key)) {
-                connection.setSelectedStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setSelectedStroke(((ObjectProperty<Color>) property).get());
             } else if ("lineWidth".equals(key)) {
-                connection.setLineWidth(((DoubleProperty) properties.get(key)).get());
+                control.setLineWidth(((DoubleProperty) property).get());
             } else if ("arrowsVisible".equals(key)) {
-                connection.setArrowsVisible(((BooleanProperty) properties.get(key)).get());
+                control.setArrowsVisible(((BooleanProperty) property).get());
             } else if ("tooltipText".equals(key)) {
-                connection.setTooltipText(((StringProperty) properties.get(key)).get());
+                control.setTooltipText(((StringProperty) property).get());
             }
         });
-        return connection;
+        return control;
     }
 }

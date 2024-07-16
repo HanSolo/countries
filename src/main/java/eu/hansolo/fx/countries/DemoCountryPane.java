@@ -24,7 +24,6 @@ import java.util.List;
 
 
 public class DemoCountryPane extends Application {
-    public static final String      VERSION = PropertyManager.INSTANCE.getVersionNumber();
     private             Country     country;
     private             CountryPane countryPane;
 
@@ -77,7 +76,7 @@ public class DemoCountryPane extends Application {
 
         Scene scene = new Scene(pane);
 
-        stage.setTitle("CountryPane Version: " + VERSION);
+        stage.setTitle("CountryPane");
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();

@@ -80,30 +80,30 @@ public class CLocationBuilder<B extends CLocationBuilder<B>> {
 
 
     public final CLocation build() {
-        CLocation location = new CLocation();
+        CLocation control = new CLocation();
         properties.forEach((key, property) -> {
             if ("name".equals(key)) {
-                location.setName(((StringProperty) properties.get(key)).get());
+                control.setName(((StringProperty) property).get());
             } else if ("timestamp".equals(key)) {
-                location.setTimestamp(((ObjectProperty<Instant>) properties.get(key)).get());
+                control.setTimestamp(((ObjectProperty<Instant>) property).get());
             } else if ("latitude".equals(key)) {
-                location.setLatitude(((DoubleProperty) properties.get(key)).get());
+                control.setLatitude(((DoubleProperty) property).get());
             } else if ("longitude".equals(key)) {
-                location.setLongitude(((DoubleProperty) properties.get(key)).get());
+                control.setLongitude(((DoubleProperty) property).get());
             } else if ("altitude".equals(key)) {
-                location.setAltitude(((DoubleProperty) properties.get(key)).get());
+                control.setAltitude(((DoubleProperty) property).get());
             } else if ("info".equals(key)) {
-                location.setInfo(((StringProperty) properties.get(key)).get());
+                control.setInfo(((StringProperty) property).get());
             } else if ("fill".equals(key)) {
-                location.setFill(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setFill(((ObjectProperty<Color>) property).get());
             } else if ("stroke".equals(key)) {
-                location.setStroke(((ObjectProperty<Color>) properties.get(key)).get());
+                control.setStroke(((ObjectProperty<Color>) property).get());
             } else if ("connectionPartType".equals(key)) {
-                location.setConnectionPartType(((ObjectProperty<ConnectionPartType>) properties.get(key)).get());
+                control.setConnectionPartType(((ObjectProperty<ConnectionPartType>) property).get());
             } else if ("country".equals(key)) {
-                location.setCountry(((ObjectProperty<Optional<Country>>) properties.get(key)).get());
+                control.setCountry(((ObjectProperty<Optional<Country>>) property).get());
             }
         });
-        return location;
+        return control;
     }
 }
